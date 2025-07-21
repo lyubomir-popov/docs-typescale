@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docs Type Scale Demo</title>
+    <link rel="stylesheet" href="dist/main.css">
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: 'Ubuntu Sans', sans-serif;
+        }
+        
+        .demo-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        
+        .baseline-grid {
+            background-image: linear-gradient(
+                to bottom,
+                rgba(255, 0, 0, 0.1) 0%,
+                rgba(255, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 0.5rem
+            );
+            background-size: 100% 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .responsive-demo {
+            font-size: calc(0.8rem + 0.2vw);
+        }
+        
+        @media (min-width: 1200px) {
+            .responsive-demo {
+                font-size: 1.125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Docs Type Scale Demo</h1>
+    
+    <div class="demo-section">
+        <h2>Responsive Typography</h2>
+        <p class="responsive-demo">
+            This text uses responsive typography with <code>calc(0.8rem + 0.2vw)</code>. 
+            Resize your browser window to see the font size change smoothly.
+        </p>
+        <p class="text-responsive">
+            This uses the <code>.text-responsive</code> utility class.
+        </p>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Baseline-Aligned Typography</h2>
+        <div class="baseline-grid">
+            <h1>Heading 1 - Baseline Aligned</h1>
+            <h2>Heading 2 - Baseline Aligned</h2>
+            <h3>Heading 3 - Baseline Aligned</h3>
+            <h4>Heading 4 - Baseline Aligned</h4>
+            <h5>Heading 5 - Baseline Aligned</h5>
+            <h6>Heading 6 - Baseline Aligned</h6>
+            <p>This paragraph is baseline-aligned with precise padding-top values calculated from Ubuntu Sans font metrics. The text should align perfectly with the red baseline grid lines.</p>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Vanilla Framework Integration</h2>
+        <p>This demo uses vanilla framework with custom overrides:</p>
+        <ul>
+            <li>Responsive font sizes using <code>calc()</code></li>
+            <li>Baseline-aligned typography (h1-h6 and p automatically aligned)</li>
+            <li>Ubuntu Sans font family</li>
+            <li>Precise baseline grid alignment</li>
+        </ul>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Usage</h2>
+        <p>To use this in your project:</p>
+        <ol>
+            <li>Include <code>dist/main.css</code> in your HTML</li>
+            <li>Use <code>.text-responsive</code> for responsive text</li>
+            <li>All h1-h6 and p elements are automatically baseline-aligned</li>
+            <li>Add <code>.baseline-grid</code> to containers for visual alignment</li>
+        </ol>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Configuration</h2>
+        <p>Edit <code>config/typography-config.json</code> to customize:</p>
+        <ul>
+            <li>Font sizes and line heights</li>
+            <li>Baseline unit (currently 0.5rem)</li>
+            <li>Font family and file</li>
+        </ul>
+        <p>The watcher will automatically regenerate tokens and update the CSS.</p>
+    </div>
+</body>
+</html> 

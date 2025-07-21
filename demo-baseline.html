@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseline Grid Typography Demo</title>
+    <link rel="stylesheet" href="dist/main.css">
+    <style>
+        /* Baseline toggle controls */
+        .p-example-controls {
+            transition-duration: .1s;
+            transition-property: transform, box-shadow, visibility;
+            transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            align-items: center;
+            background-color: var(--vf-color-background-alt);
+            bottom: 0;
+            box-shadow: 0 0 2rem 0 rgba(0, 0, 0, .2);
+            display: flex;
+            flex-flow: row wrap;
+            gap: .5rem;
+            left: 0;
+            padding: .25rem .25rem;
+            position: fixed;
+            right: 0;
+            z-index: 1000000;
+        }
+
+        .p-example-controls {
+            gap: 1rem;
+        }
+
+        .u-baseline-grid__toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        .p-switch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .p-switch__input {
+            display: none;
+        }
+
+        .p-switch__slider {
+            position: relative;
+            width: 2.5rem;
+            height: 1.25rem;
+            background-color: #ccc;
+            border-radius: 1.25rem;
+            transition: background-color 0.3s;
+        }
+
+        .p-switch__slider:before {
+            content: "";
+            position: absolute;
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .p-switch__input:checked + .p-switch__slider {
+            background-color: #0e8420;
+        }
+
+        .p-switch__input:checked + .p-switch__slider:before {
+            transform: translateX(1.25rem);
+        }
+
+        .p-switch__label {
+            font-size: 0.875rem;
+            color: var(--vf-color-text-default);
+        }
+
+        .p-example-controls__close-button {
+            margin-left: auto;
+        }
+
+        /* Baseline grid toggle functionality */
+        .u-baseline-grid.baseline-active::after {
+            display: block !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-row">
+        <div class="grid-col-4 grid-col-start-large-3">
+            <div class="u-baseline-grid">
+                <h1>4. Manage passwords<a class="headerlink" href="#manage-passwords" title="Link to this heading">¶</a>
+                </h1>
+                <p>This is a part of the <a class="reference internal" href="../"><span class="std std-doc">Charmed
+                            Apache Kafka Tutorial</span></a>.</p>
+                <p>Passwords help to secure our cluster and are essential for security. Over time it is a good practice
+                    to change the password frequently. Here we will go through setting and changing the password both
+                    for the admin user and external Apache Kafka users managed by the data-integrator.</p>
+                <section id="admin-user">
+                    <h2>Admin user<a class="headerlink" href="#admin-user" title="Link to this heading">¶</a></h2>
+                    <p>The admin user password management is handled directly by the charm, by using Juju actions.</p>
+                    <section id="retrieve-the-admin-password">
+                        <h3>Retrieve the admin password<a class="headerlink" href="#retrieve-the-admin-password"
+                                title="Link to this heading">¶</a></h3>
+                        <p>As previously mentioned, the admin password can be retrieved by running the <code
+                                class="docutils literal notranslate"><span class="pre">get-admin-credentials</span></code>
+                            action on the Charmed Apache Kafka application:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell0"><span></span>juju<span class="w"> </span>run<span class="w"> </span>kafka/leader<span class="w"> </span>get-admin-credentials
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>Running the command should output:</p>
+                        <div class="highlight-yaml notranslate">
+                            <div class="highlight">
+                                <pre id="codecell1"><span></span><span class="nt">unit-kafka-1</span><span class="p">:</span>
+      <span class="w">  </span><span class="nt">UnitId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka/1</span>
+      <span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">"10"</span>
+      <span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">client-properties</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+      <span class="w">      </span><span class="no">security.protocol=SASL_PLAINTEXT</span>
+      <span class="w">      </span><span class="no">sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="admin" password="e2sMfYLQg7sbbBMFTx1qlaZQKTUxr09x";</span>
+      <span class="w">      </span><span class="no">sasl.mechanism=SCRAM-SHA-512</span>
+      <span class="w">      </span><span class="no">bootstrap.servers=10.244.26.6:9092,10.244.26.19:9092,10.244.26.43:9092</span>
+      <span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e2sMfYLQg7sbbBMFTx1qlaZQKTUxr09x</span>
+      <span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin</span>
+      <span class="w">  </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
+      <span class="w">  </span><span class="nt">timing</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">completed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:49:30 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">enqueued</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:49:27 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">started</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:49:28 +0000 UTC</span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>The admin password is under the result: <code
+                                class="docutils literal notranslate"><span class="pre">password</span></code>.</p>
+                    </section>
+                    <section id="rotate-the-admin-password">
+                        <h3>Rotate the admin password<a class="headerlink" href="#rotate-the-admin-password"
+                                title="Link to this heading">¶</a></h3>
+                        <p>You can change the admin password to a new random password by entering:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell2"><span></span>juju<span class="w"> </span>run<span class="w"> </span>kafka/leader<span class="w"> </span>set-password<span class="w"> </span><span class="nv">username</span><span class="o">=</span>admin
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>Running the command should output:</p>
+                        <div class="highlight-yaml notranslate">
+                            <div class="highlight">
+                                <pre id="codecell3"><span></span><span class="nt">unit-kafka-1</span><span class="p">:</span>
+      <span class="w">  </span><span class="nt">UnitId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka/1</span>
+      <span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">"12"</span>
+      <span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">admin-password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">zOLGmA1OENYu4REYYJT0OvC6a00lIodg</span>
+      <span class="w">  </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
+      <span class="w">  </span><span class="nt">timing</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">completed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:51:57 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">enqueued</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:51:35 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">started</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:51:36 +0000 UTC</span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>The admin password is under the result: <code
+                                class="docutils literal notranslate"><span class="pre">admin-password</span></code>. It
+                            should be different from your previous password.</p>
+                        <div class="admonition note">
+                            <p class="admonition-title">Note</p>
+                            <p>When changing the admin password you will also need to update the admin password the in
+                                Kafka connection parameters; as the old password will no longer be valid.</p>
+                        </div>
+                    </section>
+                    <section id="set-the-admin-password">
+                        <h3>Set the admin password<a class="headerlink" href="#set-the-admin-password"
+                                title="Link to this heading">¶</a></h3>
+                        <p>You can change the admin password to a specific password by entering:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell4"><span></span>juju<span class="w"> </span>run<span class="w"> </span>kafka/leader<span class="w"> </span>set-password<span class="w"> </span><span class="nv">username</span><span class="o">=</span>admin<span class="w"> </span><span class="nv">password</span><span class="o">=</span>&lt;password&gt;
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>Running the command should output:</p>
+                        <div class="highlight-yaml notranslate">
+                            <div class="highlight">
+                                <pre id="codecell5"><span></span><span class="nt">unit-kafka-1</span><span class="p">:</span>
+      <span class="w">  </span><span class="nt">UnitId</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kafka/1</span>
+      <span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">"16"</span>
+      <span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">admin-password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;password&gt;</span>
+      <span class="w">  </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">completed</span>
+      <span class="w">  </span><span class="nt">timing</span><span class="p">:</span>
+      <span class="w">    </span><span class="nt">completed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:57:45 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">enqueued</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:57:37 +0000 UTC</span>
+      <span class="w">    </span><span class="nt">started</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2023-04-25 12:57:38 +0000 UTC</span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>The admin password under the result: <code
+                                class="docutils literal notranslate"><span class="pre">admin-password</span></code>
+                            should match whatever you passed in when you entered the command.</p>
+                        <div class="admonition note">
+                            <p class="admonition-title">Note</p>
+                            <p>When changing the admin password you will also need to update the admin password in the
+                                Kafka connection parameters, as the old password will no longer be valid.</p>
+                        </div>
+                    </section>
+                </section>
+                <section id="external-apache-kafka-users">
+                    <h2>External Apache Kafka users<a class="headerlink" href="#external-apache-kafka-users"
+                            title="Link to this heading">¶</a></h2>
+                    <p>Unlike Admin management, the password management for external Apache Kafka users is instead
+                        managed using relations. Let’s see this into play with the Data Integrator charm, that we have
+                        deployed in the previous part of the tutorial.</p>
+                    <section id="retrieve-the-password">
+                        <h3>Retrieve the password<a class="headerlink" href="#retrieve-the-password"
+                                title="Link to this heading">¶</a></h3>
+                        <p>Similarly to the Charmed Apache Kafka, the <code
+                                class="docutils literal notranslate"><span class="pre">data-integrator</span></code>
+                            also exposes an action to retrieve the credentials, e.g.</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell6"><span></span>juju<span class="w"> </span>run<span class="w"> </span>data-integrator/leader<span class="w"> </span>get-credentials
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>Running the command should output:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell7"><span></span>kafka:
+      <span class="w">  </span>endpoints:<span class="w"> </span><span class="m">10</span>.244.26.43:9092,10.244.26.6:9092,10.244.26.19:9092
+      <span class="w">  </span>password:<span class="w"> </span>S4IeRaYaiiq0tsM7m2UZuP2mSI573IGV
+      <span class="w">  </span>tls:<span class="w"> </span>disabled
+      <span class="w">  </span>topic:<span class="w"> </span>test-topic
+      <span class="w">  </span>username:<span class="w"> </span>relation-6
+      <span class="w">  </span>zookeeper-uris:<span class="w"> </span><span class="m">10</span>.244.26.121:2181,10.244.26.129:2181,10.244.26.174:2181,10.244.26.251:2181,10.244.26.28:2181/kafka
+      ok:<span class="w"> </span><span class="s2">"True"</span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell7">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>As before, the admin password is under the result: <code
+                                class="docutils literal notranslate"><span class="pre">password</span></code>.</p>
+                    </section>
+                    <section id="rotate-the-password">
+                        <h3>Rotate the password<a class="headerlink" href="#rotate-the-password"
+                                title="Link to this heading">¶</a></h3>
+                        <p>The easiest way to rotate user credentials using the <code
+                                class="docutils literal notranslate"><span class="pre">data-integrator</span></code> is
+                            by removing and then re-relating the <code
+                                class="docutils literal notranslate"><span class="pre">data-integrator</span></code>
+                            with the <code class="docutils literal notranslate"><span class="pre">kafka</span></code>
+                            charm</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell8"><span></span>juju<span class="w"> </span>remove-relation<span class="w"> </span>kafka<span class="w"> </span>data-integrator
+      <span class="c1"># wait for the relation to be torn down </span>
+      juju<span class="w"> </span>integrate<span class="w"> </span>kafka<span class="w"> </span>data-integrator
+      juju<span class="w"> </span>integrate<span class="w"> </span>kafka<span class="w"> </span>data-integrator
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell8">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>The successful credential rotation can be confirmed by retrieving the new password with the
+                            action <code
+                                class="docutils literal notranslate"><span class="pre">get-credentials</span></code></p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell9"><span></span>juju<span class="w"> </span>run<span class="w"> </span>data-integrator/leader<span class="w"> </span>get-credentials<span class="w"> </span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell9">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>Running the command should now output a different password:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell10"><span></span>kafka:
+      <span class="w">  </span>endpoints:<span class="w"> </span><span class="m">10</span>.244.26.43:9092,10.244.26.6:9092,10.244.26.19:9092
+      <span class="w">  </span>password:<span class="w"> </span>ToVfqYQ7tWmNmjy2tJTqulZHmJxJqQ22
+      <span class="w">  </span>tls:<span class="w"> </span>disabled
+      <span class="w">  </span>topic:<span class="w"> </span>test-topic
+      <span class="w">  </span>username:<span class="w"> </span>relation-11
+      <span class="w">  </span>zookeeper-uris:<span class="w"> </span><span class="m">10</span>.244.26.121:2181,10.244.26.129:2181,10.244.26.174:2181,10.244.26.251:2181,10.244.26.28:2181/kafka
+      ok:<span class="w"> </span><span class="s2">"True"</span>
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>To rotate external passwords with no or limited downtime, please refer to the how-to guide on
+                            <a class="reference internal"
+                                href="../../how-to/manage-applications/#how-to-manage-applications"><span
+                                    class="std std-ref">app management</span></a>.
+                        </p>
+                    </section>
+                    <section id="remove-the-user">
+                        <h3>Remove the user<a class="headerlink" href="#remove-the-user"
+                                title="Link to this heading">¶</a></h3>
+                        <p>To remove the user, remove the relation. Removing the relation automatically removes the user
+                            that was created when the relation was created. Enter the following to remove the relation:
+                        </p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell11"><span></span>juju<span class="w"> </span>remove-relation<span class="w"> </span>kafka<span class="w"> </span>data-integrator
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell11">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p>The output of the Juju model should be something like this:</p>
+                        <div class="highlight-shell notranslate">
+                            <div class="highlight">
+                                <pre id="codecell12"><span></span>Model<span class="w">     </span>Controller<span class="w">  </span>Cloud/Region<span class="w">         </span>Version<span class="w">  </span>SLA<span class="w">          </span>Timestamp
+      tutorial<span class="w">  </span>overlord<span class="w">    </span>localhost/localhost<span class="w">  </span><span class="m">3</span>.1.6<span class="w">    </span>unsupported<span class="w">  </span><span class="m">10</span>:20:59Z
+      
+      App<span class="w">              </span>Version<span class="w">  </span>Status<span class="w">   </span>Scale<span class="w">  </span>Charm<span class="w">            </span>Channel<span class="w">      </span>Rev<span class="w">  </span>Exposed<span class="w">  </span>Message
+      data-integrator<span class="w">           </span>blocked<span class="w">      </span><span class="m">1</span><span class="w">  </span>data-integrator<span class="w">  </span>stable<span class="w">        </span><span class="m">11</span><span class="w">  </span>no<span class="w">       </span>Please<span class="w"> </span>relate<span class="w"> </span>the<span class="w"> </span>data-integrator<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>desired<span class="w"> </span>product
+      kafka<span class="w">                     </span>active<span class="w">       </span><span class="m">3</span><span class="w">  </span>kafka<span class="w">            </span><span class="m">3</span>/stable<span class="w">     </span><span class="m">147</span><span class="w">  </span>no<span class="w">       </span>
+      zookeeper<span class="w">                 </span>active<span class="w">       </span><span class="m">5</span><span class="w">  </span>zookeeper<span class="w">        </span><span class="m">3</span>/stable<span class="w">     </span><span class="m">114</span><span class="w">  </span>no<span class="w">       </span>
+      
+      Unit<span class="w">                </span>Workload<span class="w">  </span>Agent<span class="w">  </span>Machine<span class="w">  </span>Public<span class="w"> </span>address<span class="w">  </span>Ports<span class="w">  </span>Message
+      data-integrator/0*<span class="w">  </span>blocked<span class="w">   </span>idle<span class="w">   </span><span class="m">8</span><span class="w">        </span><span class="m">10</span>.244.26.4<span class="w">            </span>Please<span class="w"> </span>relate<span class="w"> </span>the<span class="w"> </span>data-integrator<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>desired<span class="w"> </span>product
+      kafka/0<span class="w">             </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">5</span><span class="w">        </span><span class="m">10</span>.244.26.43<span class="w">           </span>
+      kafka/1*<span class="w">            </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">6</span><span class="w">        </span><span class="m">10</span>.244.26.6<span class="w">            </span>
+      kafka/2<span class="w">             </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">7</span><span class="w">        </span><span class="m">10</span>.244.26.19<span class="w">           </span>
+      zookeeper/0<span class="w">         </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">0</span><span class="w">        </span><span class="m">10</span>.244.26.251<span class="w">          </span>
+      zookeeper/1<span class="w">         </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">1</span><span class="w">        </span><span class="m">10</span>.244.26.129<span class="w">          </span>
+      zookeeper/2<span class="w">         </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">2</span><span class="w">        </span><span class="m">10</span>.244.26.121<span class="w">          </span>
+      zookeeper/3*<span class="w">        </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">3</span><span class="w">        </span><span class="m">10</span>.244.26.28<span class="w">           </span>
+      zookeeper/4<span class="w">         </span>active<span class="w">    </span>idle<span class="w">   </span><span class="m">4</span><span class="w">        </span><span class="m">10</span>.244.26.174<span class="w">          </span>
+      
+      Machine<span class="w">  </span>State<span class="w">    </span>Address<span class="w">        </span>Inst<span class="w"> </span>id<span class="w">        </span>Series<span class="w">  </span>AZ<span class="w">  </span>Message
+      <span class="m">0</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.251<span class="w">  </span>juju-f1a2cd-0<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">1</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.129<span class="w">  </span>juju-f1a2cd-1<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">2</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.121<span class="w">  </span>juju-f1a2cd-2<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">3</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.28<span class="w">   </span>juju-f1a2cd-3<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">4</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.174<span class="w">  </span>juju-f1a2cd-4<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">5</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.43<span class="w">   </span>juju-f1a2cd-5<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">6</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.6<span class="w">    </span>juju-f1a2cd-6<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">7</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.19<span class="w">   </span>juju-f1a2cd-7<span class="w">  </span>jammy<span class="w">       </span>Running
+      <span class="m">8</span><span class="w">        </span>started<span class="w">  </span><span class="m">10</span>.244.26.4<span class="w">    </span>juju-f1a2cd-8<span class="w">  </span>jammy<span class="w">       </span>Running
+      </pre><button class="copybtn o-tooltip--left" data-tooltip="Copy" data-clipboard-target="#codecell12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy"
+                                        width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <title>Copy to clipboard</title>
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                                        <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="admonition note">
+                            <p class="admonition-title">Note</p>
+                            <p>The operations above would also apply to charmed applications that implement the <code
+                                    class="docutils literal notranslate"><span class="pre">kafka_client</span></code>
+                                relation, for which password rotation and user deletion can be achieved in the same
+                                consistent way.</p>
+                        </div>
+                    </section>
+                </section>
+                <section id="what-s-next">
+                    <h2>What’s next?<a class="headerlink" href="#what-s-next" title="Link to this heading">¶</a></h2>
+                    <p>In the next part, we will now see how easy it is to enable encryption across the board, to make
+                        sure no one is eavesdropping, sniffing or snooping your traffic by enabling TLS.</p>
+                </section>
+                </section>
+
+                </article>
+            </div>
+            <footer>
+
+
+
+                <div class="related-pages">
+
+
+
+
+
+
+                </div>
+                <div class="bottom-of-page">
+                    <div class="left-details">
+                        <div class="copyright">
+                            Copyright © 2025 CC-BY-SA, Canonical Ltd.
+                        </div>
+
+                        <div class="last-updated">
+                            Last updated on Jul 15, 2025</div>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="right-details">
+                    </div>
+                </div>
+
+            </footer>
+        </div>
+        <aside class="toc-drawer">
+
+            <div class="toc-sticky toc-scroll">
+
+                <div class="toc-title-container">
+                    <span class="toc-title">
+                        Contents
+                    </span>
+                </div>
+                <div class="toc-tree-container">
+                    <div class="toc-tree">
+                        <ul>
+                            <li><a class="reference internal" href="#">4. Manage passwords</a>
+                                <ul>
+                                    <li><a class="reference internal" href="#admin-user">Admin user</a>
+                                        <ul>
+                                            <li><a class="reference internal"
+                                                    href="#retrieve-the-admin-password">Retrieve the admin password</a>
+                                            </li>
+                                            <li><a class="reference internal" href="#rotate-the-admin-password">Rotate
+                                                    the admin password</a></li>
+                                            <li><a class="reference internal" href="#set-the-admin-password">Set the
+                                                    admin password</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="reference internal" href="#external-apache-kafka-users">External
+                                            Apache Kafka users</a>
+                                        <ul>
+                                            <li><a class="reference internal" href="#retrieve-the-password">Retrieve the
+                                                    password</a></li>
+                                            <li><a class="reference internal" href="#rotate-the-password">Rotate the
+                                                    password</a></li>
+                                            <li><a class="reference internal" href="#remove-the-user">Remove the
+                                                    user</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="reference internal" href="#what-s-next">What’s next?</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </aside>
+    </div>
+    </div>
+
+    <!-- Baseline toggle controls -->
+    <div class="p-example-controls p-form">
+        <div class="u-baseline-grid__toggle">
+            <label class="p-switch">
+                <input type="checkbox" class="p-switch__input js-baseline-toggle">
+                <span class="p-switch__slider"></span>
+                <span class="p-switch__label">Toggle baseline grid</span>
+            </label>
+        </div>
+        <button class="p-button is-dense p-example-controls__close-button" id="js-example-toolbar-close-button">
+            Close
+        </button>
+    </div>
+
+    <script>
+        // Baseline toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const baselineToggle = document.querySelector('.js-baseline-toggle');
+            const baselineGrid = document.querySelector('.u-baseline-grid');
+            const closeButton = document.querySelector('.js-example-toolbar-close-button');
+
+            // Toggle baseline grid
+            baselineToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    baselineGrid.classList.add('baseline-active');
+                } else {
+                    baselineGrid.classList.remove('baseline-active');
+                }
+            });
+
+            // Close button functionality
+            closeButton.addEventListener('click', function() {
+                const controls = document.querySelector('.p-example-controls');
+                controls.style.transform = 'translateY(100%)';
+                controls.style.visibility = 'hidden';
+            });
+
+            // Show controls on page load
+            setTimeout(() => {
+                const controls = document.querySelector('.p-example-controls');
+                controls.style.visibility = 'visible';
+            }, 100);
+        });
+    </script>
+
+</body>
+
+</html>

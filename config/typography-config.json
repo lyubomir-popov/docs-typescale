@@ -1,0 +1,48 @@
+{
+  "baselineUnit": 0.4375,
+  "fontFile": "../fonts/UbuntuSans-Regular.woff",
+  "elements": [
+    {
+      "identifier": "h1",
+      "fontSize": 2,
+      "lineHeight": 5,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "h2",
+      "fontSize": 2,
+      "lineHeight": 5,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "h3",
+      "fontSize": 1.714285714285714,
+      "lineHeight": 4,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "h4",
+      "fontSize": 1.714285714285714,
+      "lineHeight": 4,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "h5",
+      "fontSize": 1.5,
+      "lineHeight": 3,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "h6",
+      "fontSize": 1.5,
+      "lineHeight": 3,
+      "spaceAfter": 1
+    },
+    {
+      "identifier": "p",
+      "fontSize": 1,
+      "lineHeight": 3,
+      "spaceAfter": 1
+    }
+  ]
+}
