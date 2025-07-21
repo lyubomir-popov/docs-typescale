@@ -30,72 +30,19 @@
             gap: 1rem;
         }
 
-        .u-baseline-grid__toggle {
-            display: flex;
-            align-items: center;
-        }
-
-        .p-switch {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .p-switch__input {
-            display: none;
-        }
-
-        .p-switch__slider {
-            position: relative;
-            width: 2.5rem;
-            height: 1.25rem;
-            background-color: #ccc;
-            border-radius: 1.25rem;
-            transition: background-color 0.3s;
-        }
-
-        .p-switch__slider:before {
-            content: "";
-            position: absolute;
-            top: 0.125rem;
-            left: 0.125rem;
-            width: 1rem;
-            height: 1rem;
-            background-color: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-        }
-
-        .p-switch__input:checked + .p-switch__slider {
-            background-color: #0e8420;
-        }
-
-        .p-switch__input:checked + .p-switch__slider:before {
-            transform: translateX(1.25rem);
-        }
-
-        .p-switch__label {
-            font-size: 0.875rem;
-            color: var(--vf-color-text-default);
-        }
-
         .p-example-controls__close-button {
             margin-left: auto;
         }
 
         /* Baseline grid toggle functionality */
-        .u-baseline-grid.baseline-active::after {
-            display: block !important;
-        }
     </style>
 </head>
 
 <body>
     <div class="grid-row">
         <div class="grid-col-4 grid-col-start-large-3">
-            <div class="u-baseline-grid">
-                <h1>4. Manage passwords<a class="headerlink" href="#manage-passwords" title="Link to this heading">¶</a>
+            <div class="">
+                <h1>4. Manage passwords <br /><em>emphasis</em> and <strong>strong emphasis</strong><a class="headerlink" href="#manage-passwords" title="Link to this heading">¶</a>
                 </h1>
                 <p>This is a part of the <a class="reference internal" href="../"><span class="std std-doc">Charmed
                             Apache Kafka Tutorial</span></a>.</p>
@@ -478,17 +425,6 @@
                 </article>
             </div>
             <footer>
-
-
-
-                <div class="related-pages">
-
-
-
-
-
-
-                </div>
                 <div class="bottom-of-page">
                     <div class="left-details">
                         <div class="copyright">
@@ -504,10 +440,9 @@
                     <div class="right-details">
                     </div>
                 </div>
-
             </footer>
         </div>
-        <aside class="toc-drawer">
+        <aside class="toc-drawer grid-col-2">
 
             <div class="toc-sticky toc-scroll">
 
@@ -519,7 +454,7 @@
                 <div class="toc-tree-container">
                     <div class="toc-tree">
                         <ul>
-                            <li><a class="reference internal" href="#">4. Manage passwords</a>
+                            <li><a class="reference internal" href="#">4. Manage passwords example of <strong>strong emphasis</strong></a>
                                 <ul>
                                     <li><a class="reference internal" href="#admin-user">Admin user</a>
                                         <ul>
@@ -556,15 +491,15 @@
 
         </aside>
     </div>
-    </div>
 
     <!-- Baseline toggle controls -->
     <div class="p-example-controls p-form">
         <div class="u-baseline-grid__toggle">
             <label class="p-switch">
-                <input type="checkbox" class="p-switch__input js-baseline-toggle">
+                <input type="checkbox" class="p-switch__input js-baseline-toggle"
+                    aria-labelledby="baseline-toggle-label">
                 <span class="p-switch__slider"></span>
-                <span class="p-switch__label">Toggle baseline grid</span>
+                <span class="p-switch__label" id="baseline-toggle-label">Toggle baseline grid</span>
             </label>
         </div>
         <button class="p-button is-dense p-example-controls__close-button" id="js-example-toolbar-close-button">
@@ -574,22 +509,22 @@
 
     <script>
         // Baseline toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const baselineToggle = document.querySelector('.js-baseline-toggle');
-            const baselineGrid = document.querySelector('.u-baseline-grid');
+            const body = document.body;
             const closeButton = document.querySelector('.js-example-toolbar-close-button');
 
-            // Toggle baseline grid
-            baselineToggle.addEventListener('change', function() {
+            // Toggle baseline grid on body
+            baselineToggle.addEventListener('change', function () {
                 if (this.checked) {
-                    baselineGrid.classList.add('baseline-active');
+                    body.classList.add('u-baseline-grid');
                 } else {
-                    baselineGrid.classList.remove('baseline-active');
+                    body.classList.remove('u-baseline-grid');
                 }
             });
 
             // Close button functionality
-            closeButton.addEventListener('click', function() {
+            closeButton.addEventListener('click', function () {
                 const controls = document.querySelector('.p-example-controls');
                 controls.style.transform = 'translateY(100%)';
                 controls.style.visibility = 'hidden';

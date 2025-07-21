@@ -58,7 +58,18 @@ h1, h2, h3, h4, h5, h6 {
         position: relative;
         display: block;
         content: '';
-        height: $baseline-unit * 3;
+        height: $baseline-unit * 2;
         // margin-top: $baseline-unit * 3 !important;
     }
+}
+
+h1, h3, h5 {
+    font-weight: 480;
+}
+h2, h4, h6 {
+    font-weight: 300;
+}
+
+strong {
+    font-weight: 700;
 }
