@@ -19,7 +19,7 @@
 // End: 14px (0.875rem) at 1400px
 $fs-start-size: 0.75rem;  // 13px
 $fs-end-size: 0.875rem;      // 14px
-$fs-breakpoint: 1400px;      // End breakpoint
+$fs-breakpoint: 1800px;      // End breakpoint
 
 // Calculate the vw slope manually: (14px - 12px) / (1400px / 100) = 2px / 14vw = 0.1428vw
 $fs-vw-slope: 0.1428vw;

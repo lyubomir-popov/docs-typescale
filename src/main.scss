@@ -52,14 +52,13 @@
     display: none;
 }
 
-
+// Increase spacing of headings following a paragraph
 h1, h2, h3, h4, h5, h6 {
     &::before {
         position: relative;
         display: block;
         content: '';
-        height: $baseline-unit * 2;
-        // margin-top: $baseline-unit * 3 !important;
+        height: $baseline-unit * 1;
     }
 }
 

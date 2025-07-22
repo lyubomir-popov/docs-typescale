@@ -4,38 +4,38 @@
   "elements": [
     {
       "identifier": "h1",
-      "fontSize": 2.285714285714286,
-      "lineHeight": 5,
+      "fontSize": 2,
+      "lineHeight": 6,
       "spaceAfter": 1
     },
     {
       "identifier": "h2",
-      "fontSize": 2.285714285714286,
-      "lineHeight": 5,
+      "fontSize": 2,
+      "lineHeight": 6,
       "spaceAfter": 1
     },
     {
       "identifier": "h3",
       "fontSize": 1.714285714285714,
-      "lineHeight": 4,
+      "lineHeight": 5,
       "spaceAfter": 1
     },
     {
       "identifier": "h4",
       "fontSize": 1.714285714285714,
-      "lineHeight": 4,
+      "lineHeight": 5,
       "spaceAfter": 1
     },
     {
       "identifier": "h5",
       "fontSize": 1.5,
-      "lineHeight": 3,
+      "lineHeight": 4,
       "spaceAfter": 2
     },
     {
       "identifier": "h6",
       "fontSize": 1.5,
-      "lineHeight": 3,
+      "lineHeight": 4,
       "spaceAfter": 2
     },
     {
