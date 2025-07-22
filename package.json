@@ -10,8 +10,8 @@
     "generate": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json",
     "generate:default": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json",
     "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json",
-    "build:default": "sass --load-path=node_modules src/main-default.scss:dist/css/default.css --style=compressed",
-    "build:editorial": "sass --load-path=node_modules src/main-editorial.scss:dist/css/editorial.css --style=compressed",
+    "build:default": "sass --load-path=node_modules src/default/main.scss:dist/css/default.css --style=compressed",
+    "build:editorial": "sass --load-path=node_modules src/editorial/main.scss:dist/css/editorial.css --style=compressed",
     "demo:default": "open dist/demos/typography-default.html",
     "demo:editorial": "open dist/demos/typography-editorial.html"
   },

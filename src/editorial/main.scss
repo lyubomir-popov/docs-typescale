@@ -6,14 +6,14 @@
 // =============================================================================
 
 // Import vanilla framework overrides (must come before vanilla framework)
-@import 'vanilla-settings-overrides';
+@import '_vanilla-settings-overrides';
 
 // =============================================================================
 // IMPORT GENERATED OVERRIDES
 // =============================================================================
 
 // Import automated vanilla overrides for editorial config
-@import 'generated/vanilla-settings-automated-overrides-editorial';
+@import '_vanilla-settings-automated-overrides';
 
 // =============================================================================
 // IMPORT VANILLA FRAMEWORK
@@ -47,7 +47,7 @@
 // =============================================================================
 
 // Import generated styles (baseline-aligned classes) for editorial config
-@import 'generated/generated-styles-editorial';
+@import '_generated-styles';
 
 // =============================================================================
 // INCLUDE VANILLA FRAMEWORK

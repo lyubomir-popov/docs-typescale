@@ -21,7 +21,7 @@ function buildConfig(configName) {
   try {
     console.log(`🔄 Building CSS for ${configName} config...`);
     
-    const mainScssFile = `src/main-${configName}.scss`;
+    const mainScssFile = `src/${configName}/main.scss`;
     const cssOutputPath = path.join(CSS_OUTPUT_DIR, `${configName}.css`);
     
     execSync(`npx sass --load-path=node_modules ${mainScssFile}:${cssOutputPath} --style=compressed`, { stdio: 'inherit' });

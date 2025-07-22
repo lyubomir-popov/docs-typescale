@@ -1,0 +1,37 @@
+
+
+// =============================================================================
+// IMPORT AUTOMATED OVERRIDES
+// =============================================================================
+
+// Import automated settings from config (must come first)
+// This is now handled in main.scss with the typescale-config variable
+
+// =============================================================================
+// MANUAL VANILLA FRAMEWORK OVERRIDES
+// =============================================================================
+
+// Override vanilla font size settings for responsive typography
+// Based on: https://github.com/canonical/vanilla-framework/pull/5521/files
+
+// Responsive font sizes using calc() - clear start and end points
+// Start: 13px (0.8125rem) at 0px
+// End: 14px (0.875rem) at 1400px
+$fs-start-size: 0.75rem;  // 13px
+$fs-end-size: 0.875rem;      // 14px
+$fs-breakpoint: 1800px;      // End breakpoint
+
+// Calculate the vw slope manually: (14px - 12px) / (1400px / 100) = 2px / 14vw = 0.1428vw
+$fs-vw-slope: 0.1428vw;
+
+// Formula: start_size + vw_slope
+$fs-calculation: calc($fs-start-size + $fs-vw-slope);
+
+$base-font-sizes: (
+  base: $fs-calculation,
+  large: $fs-calculation,
+);
+
+// Override vanilla's default font sizes to be responsive
+$font-size-base: $fs-calculation;
+$font-size-largescreen: $fs-calculation;

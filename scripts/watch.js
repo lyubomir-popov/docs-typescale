@@ -13,7 +13,7 @@ try {
 
 const CONFIG_DIR = 'config';
 const TOKENS_DIR = 'dist/tokens';
-const GENERATED_STYLES_DIR = 'src/generated';
+const GENERATED_STYLES_DIR = 'src';
 const CSS_OUTPUT_DIR = 'dist/css';
 const DEMO_OUTPUT_DIR = 'dist/demos';
 
@@ -78,7 +78,7 @@ function createVanillaOverrides(configPath) {
     
     // Compile SCSS to CSS
     console.log(`🔄 Compiling SCSS to CSS for ${configName}...`);
-    const mainScssFile = `src/main-${configName}.scss`;
+    const mainScssFile = `src/${configName}/main.scss`;
     const cssOutputPath = path.join(CSS_OUTPUT_DIR, `${configName}.css`);
     execSync(`npx sass --load-path=node_modules ${mainScssFile}:${cssOutputPath} --style=compressed`, { stdio: 'inherit' });
     console.log(`✅ CSS compiled successfully for ${configName}`);
@@ -95,7 +95,7 @@ function createVanillaOverrides(configPath) {
 
 function updateVanillaOverrides(tokens, configName) {
   try {
-    const automatedOverridesPath = path.join(GENERATED_STYLES_DIR, `_vanilla-settings-automated-overrides-${configName}.scss`);
+    const automatedOverridesPath = path.join(GENERATED_STYLES_DIR, configName, `_vanilla-settings-automated-overrides.scss`);
     
     // Generate automated overrides content completely from scratch
     let automatedContent = `// =============================================================================
@@ -163,7 +163,7 @@ function generateBaselineStyles(tokens, configName) {
 `;
     });
 
-    const generatedStylesPath = path.join(GENERATED_STYLES_DIR, `_generated-styles-${configName}.scss`);
+    const generatedStylesPath = path.join(GENERATED_STYLES_DIR, configName, `_generated-styles.scss`);
     fs.writeFileSync(generatedStylesPath, stylesContent);
     console.log(`✅ Generated styles updated for ${configName}`);
     
