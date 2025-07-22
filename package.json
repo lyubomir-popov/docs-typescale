@@ -4,10 +4,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-            "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/demo-baseline.html --entry-file=demo-baseline.html --watch=dist,src,demo-baseline.html\"",
-        "watch": "node scripts/watch.js",
-        "build": "node scripts/watch.js --build-only",
-        "generate": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json"
+    "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/dist/demos/typography-default.html --entry-file=dist/demos/typography-default.html --watch=dist\"",
+    "watch": "node scripts/watch.js",
+    "build": "node scripts/watch.js --build-only",
+    "generate": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json",
+    "generate:default": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json",
+    "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json",
+    "build:default": "node scripts/build-config.js default",
+    "build:editorial": "node scripts/build-config.js editorial",
+    "demo:default": "open dist/demos/typography-default.html",
+    "demo:editorial": "open dist/demos/typography-editorial.html"
   },
   "keywords": [],
   "author": "",

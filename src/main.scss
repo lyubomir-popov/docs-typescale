@@ -2,11 +2,26 @@
 // Based on PR #5521: variable font size (calc)
 
 // =============================================================================
+// CONFIGURATION SELECTION
+// =============================================================================
+
+// Set this variable to choose which typescale to use
+// Options: 'default', 'editorial', etc.
+$typescale-config: 'default' !default;
+
+// =============================================================================
 // IMPORT VANILLA OVERRIDES
 // =============================================================================
 
 // Import vanilla framework overrides (must come before vanilla framework)
 @import 'vanilla-settings-overrides';
+
+// =============================================================================
+// IMPORT GENERATED OVERRIDES
+// =============================================================================
+
+// Import automated vanilla overrides for the selected config
+@import 'generated/vanilla-settings-automated-overrides-#{$typescale-config}';
 
 // =============================================================================
 // IMPORT VANILLA FRAMEWORK
@@ -39,9 +54,8 @@
 // IMPORT GENERATED STYLES
 // =============================================================================
 
-// Import generated styles (baseline-aligned classes)
-
-@import 'generated-styles';
+// Import generated styles (baseline-aligned classes) for the selected config
+@import 'generated/generated-styles-#{$typescale-config}';
 
 // =============================================================================
 // INCLUDE VANILLA FRAMEWORK

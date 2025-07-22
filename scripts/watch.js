@@ -11,67 +11,97 @@ try {
   execSync('npm install --save-dev chokidar', { stdio: 'inherit' });
 }
 
-const CONFIG_PATH = 'config/typography-config.json';
-const TOKENS_PATH = 'dist/tokens.json';
-const GENERATED_STYLES_PATH = 'src/_generated-styles.scss';
-const CSS_OUTPUT_PATH = 'dist/main.css';
+const CONFIG_DIR = 'config';
+const TOKENS_DIR = 'dist/tokens';
+const GENERATED_STYLES_DIR = 'src/generated';
+const CSS_OUTPUT_DIR = 'dist/css';
+const DEMO_OUTPUT_DIR = 'dist/demos';
 
-function generateTokens() {
+// Ensure output directories exist
+function ensureDirectories() {
+  const dirs = [TOKENS_DIR, GENERATED_STYLES_DIR, CSS_OUTPUT_DIR, DEMO_OUTPUT_DIR];
+  dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+}
+
+function getConfigFiles() {
+  const configPath = path.join(process.cwd(), CONFIG_DIR);
+  if (!fs.existsSync(configPath)) {
+    return [];
+  }
+  
+  return fs.readdirSync(configPath)
+    .filter(file => file.startsWith('typography-config') && file.endsWith('.json'))
+    .map(file => path.join(CONFIG_DIR, file));
+}
+
+function getConfigName(configPath) {
+  const filename = path.basename(configPath, '.json');
+  // Extract the name part after "typography-config-"
+  const match = filename.match(/typography-config-(.+)/);
+  return match ? match[1] : 'default';
+}
+
+function generateTokens(configPath) {
   try {
-    console.log('🔄 Generating tokens from baseline nudge generator...');
-    execSync('npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config.json', { stdio: 'inherit' });
-    console.log('✅ Tokens generated successfully');
+    const configName = getConfigName(configPath);
+    console.log(`🔄 Generating tokens for ${configName} from ${configPath}...`);
+    execSync(`npx @lyubomir-popov/baseline-nudge-generator generate ${configPath}`, { stdio: 'inherit' });
+    console.log(`✅ Tokens generated successfully for ${configName}`);
     return true;
   } catch (error) {
-    console.error('❌ Failed to generate tokens:', error.message);
+    console.error(`❌ Failed to generate tokens for ${configPath}:`, error.message);
     return false;
   }
 }
 
-function createVanillaOverrides() {
+function createVanillaOverrides(configPath) {
   try {
-    if (!fs.existsSync(TOKENS_PATH)) {
-      console.error('❌ Tokens file not found. Run the generator first.');
+    const configName = getConfigName(configPath);
+    const tokensPath = path.join(TOKENS_DIR, `${configName}-tokens.json`);
+    
+    if (!fs.existsSync(tokensPath)) {
+      console.error(`❌ Tokens file not found for ${configName}. Run the generator first.`);
       return false;
     }
 
-    const tokens = JSON.parse(fs.readFileSync(TOKENS_PATH, 'utf8'));
+    const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
     
     // Update vanilla overrides file
-    updateVanillaOverrides(tokens);
+    updateVanillaOverrides(tokens, configName);
     
     // Generate baseline-aligned styles file
-    generateBaselineStyles(tokens);
+    generateBaselineStyles(tokens, configName);
     
-    // Ensure directories exist
-    if (!fs.existsSync('src')) {
-      fs.mkdirSync('src', { recursive: true });
-    }
-    if (!fs.existsSync('dist')) {
-      fs.mkdirSync('dist', { recursive: true });
-    }
-
     // Compile SCSS to CSS
-    console.log('🔄 Compiling SCSS to CSS...');
-    execSync(`npx sass --load-path=node_modules src/main.scss ${CSS_OUTPUT_PATH} --style=compressed`, { stdio: 'inherit' });
-    console.log('✅ CSS compiled successfully');
+    console.log(`🔄 Compiling SCSS to CSS for ${configName}...`);
+    const scssVariable = `typescale-config:${configName}`;
+    const cssOutputPath = path.join(CSS_OUTPUT_DIR, `${configName}.css`);
+    execSync(`npx sass --load-path=node_modules src/main.scss:${cssOutputPath} --style=compressed --variable=${scssVariable}`, { stdio: 'inherit' });
+    console.log(`✅ CSS compiled successfully for ${configName}`);
+    
+    // Generate demo HTML
+    generateDemoHTML(configName, cssOutputPath);
     
     return true;
   } catch (error) {
-    console.error('❌ Failed to create vanilla overrides:', error.message);
+    console.error(`❌ Failed to create vanilla overrides for ${configPath}:`, error.message);
     return false;
   }
 }
 
-function updateVanillaOverrides(tokens) {
+function updateVanillaOverrides(tokens, configName) {
   try {
-    const automatedOverridesPath = 'src/_vanilla-settings-automated-overrides.scss';
+    const automatedOverridesPath = path.join(GENERATED_STYLES_DIR, `_vanilla-settings-automated-overrides-${configName}.scss`);
     
     // Generate automated overrides content completely from scratch
     let automatedContent = `// =============================================================================
-// AUTOMATED VANILLA SETTINGS OVERRIDES
+// AUTOMATED VANILLA SETTINGS OVERRIDES - ${configName.toUpperCase()}
 // =============================================================================
-// This file is auto-generated from config/typography-config.json
+// This file is auto-generated from config/typography-config-${configName}.json
 // Do not edit manually - changes will be overwritten
 
 // Generated from baseline nudge generator tokens
@@ -86,28 +116,21 @@ $baseline-unit: ${parseFloat(tokens.baselineUnit)}rem;
 // Typography scale overrides from config
 `;
 
-
-
-    // Ensure src directory exists
-    if (!fs.existsSync('src')) {
-      fs.mkdirSync('src', { recursive: true });
-    }
-
     fs.writeFileSync(automatedOverridesPath, automatedContent);
-    console.log('✅ Automated vanilla settings overrides updated');
+    console.log(`✅ Automated vanilla settings overrides updated for ${configName}`);
     
     return true;
   } catch (error) {
-    console.error('❌ Failed to update automated vanilla overrides:', error.message);
+    console.error(`❌ Failed to update automated vanilla overrides for ${configName}:`, error.message);
     return false;
   }
 }
 
-function generateBaselineStyles(tokens) {
+function generateBaselineStyles(tokens, configName) {
   try {
     // Generate baseline-aligned styles content
     let stylesContent = `// =============================================================================
-// GENERATED STYLES
+// GENERATED STYLES - ${configName.toUpperCase()}
 // =============================================================================
 // This file is auto-generated by the baseline nudge generator
 // Do not edit manually - changes will be overwritten
@@ -140,68 +163,179 @@ function generateBaselineStyles(tokens) {
 `;
     });
 
-    // Ensure src directory exists
-    if (!fs.existsSync('src')) {
-      fs.mkdirSync('src', { recursive: true });
-    }
-
-    // Write generated styles file (completely overwrite)
-    fs.writeFileSync(GENERATED_STYLES_PATH, stylesContent);
-    console.log('✅ Generated styles updated');
+    const generatedStylesPath = path.join(GENERATED_STYLES_DIR, `_generated-styles-${configName}.scss`);
+    fs.writeFileSync(generatedStylesPath, stylesContent);
+    console.log(`✅ Generated styles updated for ${configName}`);
     
     return true;
   } catch (error) {
-    console.error('❌ Failed to generate baseline styles:', error.message);
+    console.error(`❌ Failed to generate baseline styles for ${configName}:`, error.message);
     return false;
   }
 }
 
-function processFiles() {
-  console.log('\n🔄 Processing typography changes...');
+function generateDemoHTML(configName, cssPath) {
+  try {
+    const demoContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography Demo - ${configName.charAt(0).toUpperCase() + configName.slice(1)}</title>
+    <link rel="stylesheet" href="../css/${configName}.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .baseline-grid {
+            background: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
+            background-size: 100% var(--baseline-unit, 0.5rem);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+        .toggle-grid {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            padding: 0.5rem 1rem;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .toggle-grid:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-grid" onclick="toggleGrid()">Toggle Baseline Grid</button>
+    
+    <div class="demo-container">
+        <div class="baseline-grid" id="baseline-grid"></div>
+        <div class="content">
+            <h1>Typography Demo - ${configName.charAt(0).toUpperCase() + configName.slice(1)}</h1>
+            
+            <p>This is a demonstration of the ${configName} typescale. The baseline grid overlay shows how text aligns to the baseline grid.</p>
+            
+            <h2>Heading Level 2</h2>
+            <p>This paragraph demonstrates the spacing and alignment between headings and paragraphs. The baseline grid ensures consistent vertical rhythm throughout the document.</p>
+            
+            <h3>Heading Level 3</h3>
+            <p>Each heading level has been carefully calibrated to maintain proper spacing and alignment. The baseline unit provides a consistent foundation for all typography.</p>
+            
+            <h4>Heading Level 4</h4>
+            <p>Notice how all text elements align perfectly to the baseline grid. This creates a harmonious visual rhythm that improves readability and overall design quality.</p>
+            
+            <h5>Heading Level 5</h5>
+            <p>The spacing between elements is calculated based on the baseline unit, ensuring consistent vertical rhythm. This approach works well for both short and long-form content.</p>
+            
+            <h6>Heading Level 6</h6>
+            <p>This typescale is designed specifically for ${configName} content. The font sizes, line heights, and spacing have been optimized for this particular use case.</p>
+            
+            <h2>Another Section</h2>
+            <p>You can toggle the baseline grid overlay using the button in the top-right corner. This helps visualize how the typography aligns to the baseline grid.</p>
+            
+            <h3>Technical Details</h3>
+            <p>The baseline grid is calculated using the baseline unit from the configuration. Each text element includes precise padding-top values to ensure perfect alignment.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleGrid() {
+            const grid = document.getElementById('baseline-grid');
+            grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>`;
+
+    const demoPath = path.join(DEMO_OUTPUT_DIR, `typography-${configName}.html`);
+    fs.writeFileSync(demoPath, demoContent);
+    console.log(`✅ Demo HTML generated for ${configName}`);
+    
+    return true;
+  } catch (error) {
+    console.error(`❌ Failed to generate demo HTML for ${configName}:`, error.message);
+    return false;
+  }
+}
+
+function processConfig(configPath) {
+  console.log(`\n🔄 Processing typography config: ${configPath}`);
   
-  if (generateTokens()) {
-    createVanillaOverrides();
+  if (generateTokens(configPath)) {
+    createVanillaOverrides(configPath);
   }
   
-  console.log('✅ Processing complete\n');
+  console.log(`✅ Processing complete for ${configPath}\n`);
+}
+
+function processAllConfigs() {
+  console.log('\n🔄 Processing all typography configs...');
+  
+  const configFiles = getConfigFiles();
+  if (configFiles.length === 0) {
+    console.log('❌ No typography config files found in config/ directory');
+    return;
+  }
+  
+  configFiles.forEach(configPath => {
+    processConfig(configPath);
+  });
+  
+  console.log('✅ All configs processed\n');
 }
 
 // Check if build-only mode is requested
 const isBuildOnly = process.argv.includes('--build-only');
 
 if (isBuildOnly) {
-  console.log('🔨 Building once...');
-  processFiles();
+  console.log('🔨 Building all configs once...');
+  ensureDirectories();
+  processAllConfigs();
   process.exit(0);
 }
 
 // Set up file watcher
-console.log('👀 Watching for changes in typography config and SCSS files...');
-console.log('📁 Watching:', CONFIG_PATH, 'and specific SCSS files');
+console.log('👀 Watching for changes in typography config files...');
+console.log('📁 Watching config/ directory for typography-config-*.json files');
 
-const watcher = chokidar.watch([CONFIG_PATH, path.join(process.cwd(), 'src/main.scss'), path.join(process.cwd(), 'src/_vanilla-settings-overrides.scss'), path.join(process.cwd(), 'src/_generated-styles.scss')], {
+ensureDirectories();
+
+const watcher = chokidar.watch(path.join(process.cwd(), CONFIG_DIR, 'typography-config-*.json'), {
   persistent: true,
   ignoreInitial: false,
   usePolling: true,
   interval: 1000
 });
 
-watcher.on('change', (path) => {
-  console.log(`📝 File changed: ${path}`);
-  
-  if (path === CONFIG_PATH) {
-    // Typography config changed - regenerate tokens and styles
-    processFiles();
-  } else if (path.endsWith('.scss')) {
-    // SCSS file changed - just recompile CSS
-    console.log('🔄 Recompiling SCSS to CSS...');
-    try {
-      execSync(`npx sass --load-path=node_modules src/main.scss ${CSS_OUTPUT_PATH} --style=compressed`, { stdio: 'inherit' });
-      console.log('✅ CSS recompiled successfully');
-    } catch (error) {
-      console.error('❌ Failed to recompile CSS:', error.message);
-    }
-  }
+watcher.on('change', (filePath) => {
+  console.log(`📝 Config file changed: ${filePath}`);
+  processConfig(filePath);
+});
+
+watcher.on('add', (filePath) => {
+  console.log(`📝 New config file added: ${filePath}`);
+  processConfig(filePath);
 });
 
 watcher.on('error', (error) => {
