@@ -45,36 +45,36 @@ function getConfigName(configPath) {
   return match ? match[1] : 'default';
 }
 
-function generateTokens(configPath) {
-  try {
-    const configName = getConfigName(configPath);
-    console.log(`🔄 Generating tokens for ${configName} from ${configPath}...`);
-    execSync(`npx @lyubomir-popov/baseline-nudge-generator generate ${configPath}`, { stdio: 'inherit' });
-    console.log(`✅ Tokens generated successfully for ${configName}`);
-    return true;
-  } catch (error) {
-    console.error(`❌ Failed to generate tokens for ${configPath}:`, error.message);
-    return false;
-  }
-}
+
 
 function createVanillaOverrides(configPath) {
   try {
     const configName = getConfigName(configPath);
-    const tokensPath = path.join(TOKENS_DIR, `${configName}-tokens.json`);
     
-    if (!fs.existsSync(tokensPath)) {
-      console.error(`❌ Tokens file not found for ${configName}. Run the generator first.`);
+    // Generate tokens for this specific config
+    console.log(`🔄 Generating tokens for ${configName} from ${configPath}...`);
+    execSync(`npx @lyubomir-popov/baseline-nudge-generator generate ${configPath}`, { stdio: 'inherit' });
+    
+    // Copy tokens.json to the demo's directory
+    const sourceTokensPath = path.join('dist', 'tokens.json');
+    const demoTokensPath = path.join(GENERATED_STYLES_DIR, configName, 'tokens.json');
+    
+    if (!fs.existsSync(sourceTokensPath)) {
+      console.error(`❌ Tokens file not found for ${configName}. Generation failed.`);
       return false;
     }
-
-    const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
     
-    // Ensure the config directory exists
+    // Ensure the demo directory exists
     const configDir = path.join(GENERATED_STYLES_DIR, configName);
     if (!fs.existsSync(configDir)) {
       fs.mkdirSync(configDir, { recursive: true });
     }
+    
+    // Copy tokens to demo directory
+    fs.copyFileSync(sourceTokensPath, demoTokensPath);
+    console.log(`✅ Tokens copied to ${demoTokensPath}`);
+    
+    const tokens = JSON.parse(fs.readFileSync(demoTokensPath, 'utf8'));
     
     // Update vanilla overrides file
     updateVanillaOverrides(tokens, configName);
@@ -288,9 +288,7 @@ function generateDemoHTML(configName, cssPath) {
 function processConfig(configPath) {
   console.log(`\n🔄 Processing typography config: ${configPath}`);
   
-  if (generateTokens(configPath)) {
-    createVanillaOverrides(configPath);
-  }
+  createVanillaOverrides(configPath);
   
   console.log(`✅ Processing complete for ${configPath}\n`);
 }

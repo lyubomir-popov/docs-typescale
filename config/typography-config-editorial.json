@@ -16,7 +16,7 @@
     },
     {
       "identifier": "h3",
-      "fontSize": 1.75,
+      "fontSize": 1.5,
       "lineHeight": 4,
       "spaceAfter": 1
     },
@@ -28,19 +28,19 @@
     },
     {
       "identifier": "h5",
-      "fontSize": 1.25,
+      "fontSize": 1,
       "lineHeight": 3,
       "spaceAfter": 2
     },
     {
       "identifier": "h6",
-      "fontSize": 1.125,
+      "fontSize": 1,
       "lineHeight": 3,
       "spaceAfter": 2
     },
     {
       "identifier": "p",
-      "fontSize": 1.125,
+      "fontSize": 1,
       "lineHeight": 4,
       "spaceAfter": 2
     }
