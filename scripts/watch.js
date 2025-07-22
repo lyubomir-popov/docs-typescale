@@ -70,6 +70,12 @@ function createVanillaOverrides(configPath) {
 
     const tokens = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
     
+    // Ensure the config directory exists
+    const configDir = path.join(GENERATED_STYLES_DIR, configName);
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+    }
+    
     // Update vanilla overrides file
     updateVanillaOverrides(tokens, configName);
     
@@ -316,12 +322,21 @@ if (isBuildOnly) {
 }
 
 // Set up file watcher
-console.log('👀 Watching for changes in typography config files...');
-console.log('📁 Watching config/ directory for typography-config-*.json files');
+console.log('👀 Watching for changes in typography config and SCSS files...');
+console.log('📁 Watching config/ directory and src/ directories');
 
 ensureDirectories();
 
-const watcher = chokidar.watch(path.join(process.cwd(), CONFIG_DIR, 'typography-config-*.json'), {
+// Watch all relevant files for both demos
+const watchPaths = [
+  path.join(process.cwd(), CONFIG_DIR, 'typography-config-*.json'),
+  path.join(process.cwd(), 'src/default/*.scss'),
+  path.join(process.cwd(), 'src/editorial/*.scss'),
+  path.join(process.cwd(), 'src/default/main.scss'),
+  path.join(process.cwd(), 'src/editorial/main.scss')
+];
+
+const watcher = chokidar.watch(watchPaths, {
   persistent: true,
   ignoreInitial: false,
   usePolling: true,
@@ -329,13 +344,35 @@ const watcher = chokidar.watch(path.join(process.cwd(), CONFIG_DIR, 'typography-
 });
 
 watcher.on('change', (filePath) => {
-  console.log(`📝 Config file changed: ${filePath}`);
-  processConfig(filePath);
+  console.log(`📝 File changed: ${filePath}`);
+  
+  // Determine which configs need to be rebuilt
+  const configFiles = getConfigFiles();
+  if (configFiles.length === 0) {
+    console.log('❌ No typography config files found in config/ directory');
+    return;
+  }
+  
+  // Rebuild all configs when any file changes
+  console.log('🔄 Rebuilding all demos...');
+  configFiles.forEach(configPath => {
+    processConfig(configPath);
+  });
+  console.log('✅ All demos rebuilt\n');
 });
 
 watcher.on('add', (filePath) => {
-  console.log(`📝 New config file added: ${filePath}`);
-  processConfig(filePath);
+  console.log(`📝 New file added: ${filePath}`);
+  
+  // Rebuild all configs when any file is added
+  const configFiles = getConfigFiles();
+  if (configFiles.length > 0) {
+    console.log('🔄 Rebuilding all demos...');
+    configFiles.forEach(configPath => {
+      processConfig(configPath);
+    });
+    console.log('✅ All demos rebuilt\n');
+  }
 });
 
 watcher.on('error', (error) => {
