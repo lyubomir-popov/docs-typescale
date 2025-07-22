@@ -78,9 +78,9 @@ function createVanillaOverrides(configPath) {
     
     // Compile SCSS to CSS
     console.log(`🔄 Compiling SCSS to CSS for ${configName}...`);
-    const scssVariable = `typescale-config:${configName}`;
+    const mainScssFile = `src/main-${configName}.scss`;
     const cssOutputPath = path.join(CSS_OUTPUT_DIR, `${configName}.css`);
-    execSync(`npx sass --load-path=node_modules src/main.scss:${cssOutputPath} --style=compressed --variable=${scssVariable}`, { stdio: 'inherit' });
+    execSync(`npx sass --load-path=node_modules ${mainScssFile}:${cssOutputPath} --style=compressed`, { stdio: 'inherit' });
     console.log(`✅ CSS compiled successfully for ${configName}`);
     
     // Generate demo HTML

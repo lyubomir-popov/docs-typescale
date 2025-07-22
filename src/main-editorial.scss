@@ -1,0 +1,80 @@
+// Main SCSS file for editorial typescale (long-form content)
+// Based on PR #5521: variable font size (calc)
+
+// =============================================================================
+// IMPORT VANILLA OVERRIDES
+// =============================================================================
+
+// Import vanilla framework overrides (must come before vanilla framework)
+@import 'vanilla-settings-overrides';
+
+// =============================================================================
+// IMPORT GENERATED OVERRIDES
+// =============================================================================
+
+// Import automated vanilla overrides for editorial config
+@import 'generated/vanilla-settings-automated-overrides-editorial';
+
+// =============================================================================
+// IMPORT VANILLA FRAMEWORK
+// =============================================================================
+
+// Import vanilla framework after our overrides
+@import 'vanilla-framework';
+// Include vanilla framework after all our customizations
+@include vanilla; 
+
+// =============================================================================
+// CUSTOM UTILITIES
+// =============================================================================
+
+.u-baseline-grid::after {
+    background: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
+    background-size: 100% $baseline-unit;
+    bottom: 0;
+    content: "";
+    display: block;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 400;
+}
+
+// =============================================================================
+// IMPORT GENERATED STYLES
+// =============================================================================
+
+// Import generated styles (baseline-aligned classes) for editorial config
+@import 'generated/generated-styles-editorial';
+
+// =============================================================================
+// INCLUDE VANILLA FRAMEWORK
+// =============================================================================
+
+
+.copybtn {
+    display: none;
+}
+
+// Increase spacing of headings following a paragraph
+h1, h2, h3, h4, h5, h6 {
+    &::before {
+        position: relative;
+        display: block;
+        content: '';
+        height: $baseline-unit * 1;
+    }
+}
+
+h1, h3, h5 {
+    font-weight: 480;
+}
+h2, h4, h6 {
+    font-weight: 300;
+}
+
+strong {
+    font-weight: 700;
+} 

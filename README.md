@@ -120,7 +120,8 @@ docs-typescale/
 │   │   └── typography-editorial.html
 │   └── index.html                         # Main demo index page
 ├── src/
-│   ├── main.scss                          # Main SCSS file (imports other files)
+│   ├── main-default.scss                  # Main SCSS file for default typescale
+│   ├── main-editorial.scss                # Main SCSS file for editorial typescale
 │   ├── _vanilla-settings-overrides.scss   # Manual vanilla framework variable overrides
 │   └── generated/                         # Auto-generated files per config
 │       ├── _vanilla-settings-automated-overrides-default.scss
@@ -194,6 +195,21 @@ The generated SCSS overrides vanilla framework variables:
    - Modify `config/typography-config.json` to adjust the default typescale
    - Modify `config/typography-config-editorial.json` to adjust the editorial typescale
 
+## Benefits of Separate Main SCSS Files
+
+Each typescale now has its own dedicated main SCSS file:
+
+- **`src/main-default.scss`** - For the default documentation typescale
+- **`src/main-editorial.scss`** - For the editorial long-form typescale
+
+This approach provides several advantages:
+
+1. **Simultaneous Development** - You can work on both typescales independently without conflicts
+2. **Clear Separation** - Each typescale has its own complete SCSS structure
+3. **Independent Compilation** - Each can be compiled separately without affecting the other
+4. **Easier Debugging** - Issues in one typescale don't affect the other
+5. **Better Organization** - Clear file structure makes it easy to understand which files belong to which typescale
+
 ## Adding New Typescales
 
 To add a new typescale:
@@ -203,20 +219,27 @@ To add a new typescale:
    cp config/typography-config.json config/typography-config-[name].json
    ```
 
-2. **Edit the new config file** with your desired typography settings
+2. **Create a new main SCSS file:**
+   ```bash
+   cp src/main-default.scss src/main-[name].scss
+   ```
 
-3. **The watcher will automatically:**
+3. **Edit the new files:**
+   - Update the config file with your desired typography settings
+   - Update the main SCSS file to import the correct generated files for your config
+
+4. **The watcher will automatically:**
    - Generate tokens for the new config
-   - Create corresponding SCSS files
+   - Create corresponding SCSS files in `src/generated/`
    - Build CSS for the new config
    - Generate a demo HTML file
 
-4. **Add npm scripts** (optional):
+5. **Add npm scripts** (optional):
    ```json
    {
      "scripts": {
        "generate:[name]": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-[name].json",
-       "build:[name]": "node scripts/build-config.js [name]",
+       "build:[name]": "sass --load-path=node_modules src/main-[name].scss:dist/css/[name].css --style=compressed",
        "demo:[name]": "open dist/demos/typography-[name].html"
      }
    }
@@ -279,7 +302,7 @@ height: $baseline-unit * 1;  // Change the multiplier (1) to adjust spacing
 
 The SCSS is organized into modular files:
 
-- **`src/main.scss`** - Main file that imports everything in the correct order
+- **`src/main-[name].scss`** - Dedicated main file for each typescale (e.g., `main-default.scss`, `main-editorial.scss`)
 - **`src/_vanilla-settings-overrides.scss`** - Manual vanilla framework variable overrides (imported first)
 - **`src/generated/_vanilla-settings-automated-overrides-[name].scss`** - Auto-generated vanilla overrides from config
 - **`src/generated/_generated-styles-[name].scss`** - Auto-generated baseline-aligned classes (imported last)
