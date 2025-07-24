@@ -10,7 +10,7 @@
     {
       "identifier": "h1",
       "fontSize": 2.25,
-      "lineHeight": 6,
+      "lineHeight": 5,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,

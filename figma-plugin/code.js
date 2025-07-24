@@ -37,8 +37,11 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       const fontWeight = element.fontWeight || 400; // Default to 400 if not specified
       const fontStyle = element.fontStyle || "normal";
       
-      // Calculate margin-bottom: spaceAfter - nudgeTop
-      const marginBottom = spaceAfter - nudgeTop;
+      // Calculate bottom padding: spaceAfter - nudgeTop
+      const paddingBottom = spaceAfter - nudgeTop;
+      
+      // Debug: Log the padding values
+      figma.notify(`Padding for ${element.identifier}: top=${nudgeTop}px, bottom=${paddingBottom}px (spaceAfter=${spaceAfter}px - nudgeTop=${nudgeTop}px)`);
       
       // Create meaningful text for this element
       const configName = element.fontSize === 36 ? "editorial" : "docs";
@@ -125,7 +128,7 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       component.primaryAxisSizingMode = "AUTO"; // This makes it hug content height
       component.counterAxisSizingMode = "AUTO"; // Let width be determined by content
       component.paddingTop = nudgeTop;
-      component.paddingBottom = marginBottom;
+      component.paddingBottom = paddingBottom;
       component.fills = []; // Remove white background from individual components
       
       // Add the text node directly to the component

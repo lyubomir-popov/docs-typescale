@@ -108,77 +108,77 @@
       return Math.round(parseFloat(rem) * 16 * 10) / 10; // Keep one decimal place
     }
     
-    // Function to load and parse config files directly
-    async function loadConfig(configType) {
+    // Function to load and parse tokens.json files (which contain calculated nudges)
+    async function loadTokens(configType) {
       try {
-        const response = await fetch(`../config/typography-config-${configType}.json`);
-        const config = await response.json();
-        return config;
+        const response = await fetch(`../src/${configType}/tokens.json`);
+        const tokens = await response.json();
+        return tokens;
       } catch (error) {
-        console.error(`Failed to load ${configType} config:`, error);
+        console.error(`Failed to load ${configType} tokens:`, error);
         // Fallback to hardcoded values if file can't be loaded
         return getFallbackConfig(configType);
       }
     }
     
-    // Fallback configs in case config files can't be loaded
+    // Fallback configs in case tokens.json can't be loaded
     function getFallbackConfig(configType) {
       if (configType === 'docs') {
         return {
-          baselineUnit: 0.5,
-          elements: [
-            { identifier: "h1", fontSize: 2, lineHeight: 6, spaceAfter: 1, fontWeight: 450, fontStyle: "normal" },
-            { identifier: "h2", fontSize: 2, lineHeight: 6, spaceAfter: 1, fontWeight: 200, fontStyle: "normal" },
-            { identifier: "h3", fontSize: 1.5, lineHeight: 5, spaceAfter: 1, fontWeight: 450, fontStyle: "normal" },
-            { identifier: "h4", fontSize: 1.5, lineHeight: 5, spaceAfter: 1, fontWeight: 250, fontStyle: "normal" },
-            { identifier: "h5", fontSize: 1.125, lineHeight: 4, spaceAfter: 2, fontWeight: 450, fontStyle: "normal" },
-            { identifier: "h6", fontSize: 1.125, lineHeight: 4, spaceAfter: 2, fontWeight: 300, fontStyle: "normal" },
-            { identifier: "p", fontSize: 0.875, lineHeight: 2.5, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" }
-          ]
+          baselineUnit: "0.5rem",
+          elements: {
+            h1: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.20028rem" },
+            h2: { fontSize: "2rem", lineHeight: "2.5rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.45028rem" },
+            h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 250, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+            h5: { fontSize: "1.125rem", lineHeight: "1.75rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            h6: { fontSize: "1.125rem", lineHeight: "1.75rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            p: { fontSize: "0.875rem", lineHeight: "1.09375rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.03063rem" }
+          }
         };
       } else {
         return {
-          baselineUnit: 0.5,
-          elements: [
-            { identifier: "h1", fontSize: 2.25, lineHeight: 6, spaceAfter: 2, fontWeight: 500, fontStyle: "normal" },
-            { identifier: "h2", fontSize: 2.25, lineHeight: 5, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" },
-            { identifier: "h3", fontSize: 1.5, lineHeight: 4, spaceAfter: 1, fontWeight: 500, fontStyle: "normal" },
-            { identifier: "h4", fontSize: 1.5, lineHeight: 4, spaceAfter: 1, fontWeight: 400, fontStyle: "normal" },
-            { identifier: "h5", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 500, fontStyle: "normal" },
-            { identifier: "h6", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" },
-            { identifier: "p", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" }
-          ]
+          baselineUnit: "0.5rem",
+          elements: {
+            h1: { fontSize: "2.25rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.20028rem" },
+            h2: { fontSize: "2.25rem", lineHeight: "2.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.45028rem" },
+            h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+            h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            p: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" }
+          }
         };
       }
     }
     
-    // Function to convert config to plugin format
-    function configToPluginFormat(config, paragraphSize) {
+    // Function to convert tokens to plugin format
+    function tokensToPluginFormat(tokens, paragraphSize) {
       const elements = [];
+      const elementOrder = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
       
-      for (const element of config.elements) {
-        let fontSize = element.fontSize * 16; // Convert rem to px
-        if (element.identifier === 'p') {
-          fontSize = paragraphSize;
+      for (const identifier of elementOrder) {
+        const element = tokens.elements[identifier];
+        if (element) {
+          let fontSize = remToPx(element.fontSize);
+          if (identifier === 'p') {
+            fontSize = paragraphSize;
+          }
+          
+          elements.push({
+            identifier: identifier,
+            fontSize: fontSize,
+            lineHeight: remToPxLineHeight(element.lineHeight),
+            spaceAfter: remToPxSpacing(element.spaceAfter),
+            nudgeTop: remToPxNudge(element.nudgeTop),
+            fontWeight: element.fontWeight || 400,
+            fontStyle: element.fontStyle || "normal"
+          });
         }
-        
-        const lineHeight = element.lineHeight * 8; // Convert baseline units to px (baseline unit * 16)
-        const spaceAfter = element.spaceAfter * 8; // Convert baseline units to px
-        const nudgeTop = element.nudgeTop * 8; // Convert baseline units to px (if nudgeTop exists)
-        
-        elements.push({
-          identifier: element.identifier,
-          fontSize: fontSize,
-          lineHeight: lineHeight,
-          spaceAfter: spaceAfter,
-          nudgeTop: nudgeTop || 0,
-          fontWeight: element.fontWeight || 400,
-          fontStyle: element.fontStyle || "normal"
-        });
       }
       
       return {
-        baselineUnit: config.baselineUnit * 16, // Convert to px
+        baselineUnit: remToPx(tokens.baselineUnit),
         elements: elements
       };
     }
@@ -191,8 +191,8 @@
       const paragraphSize = document.getElementById('paragraph-size').value;
       
       const configType = configSelect.value;
-      const config = await loadConfig(configType);
-      currentConfig = configToPluginFormat(config, parseInt(paragraphSize));
+      const tokens = await loadTokens(configType);
+      currentConfig = tokensToPluginFormat(tokens, parseInt(paragraphSize));
       
       const preview = document.getElementById('config-preview');
       
