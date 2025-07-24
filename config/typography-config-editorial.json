@@ -9,8 +9,8 @@
   "elements": [
     {
       "identifier": "h1",
-      "fontSize": 2.25,
-      "lineHeight": 5,
+      "fontSize": 2.625,
+      "lineHeight": 6,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,
@@ -18,11 +18,11 @@
     },
     {
       "identifier": "h2",
-      "fontSize": 2.25,
-      "lineHeight": 5,
+      "fontSize": 2.625,
+      "lineHeight": 6,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 400,
+      "fontWeight": 200,
       "fontStyle": "normal"
     },
     {
@@ -40,7 +40,7 @@
       "lineHeight": 4,
       "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 400,
+      "fontWeight": 300,
       "fontStyle": "normal"
     },
     {
@@ -58,7 +58,7 @@
       "lineHeight": 3,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 400,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {

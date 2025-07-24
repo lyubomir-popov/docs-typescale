@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/dist/demos/typography-docs.html --entry-file=dist/demos/typography-docs.html --watch=dist\"",
     "watch": "node scripts/watch.js",
+    "generate": "npm run generate:docs && npm run generate:editorial",
     "generate:docs": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-docs.json",
     "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json",
     "build:docs": "sass --load-path=node_modules src/docs/main.scss:dist/css/docs.css --style=compressed",

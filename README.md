@@ -198,12 +198,12 @@ docs-typescale/
 - `npm run dev` - Start the development watcher (main command)
 - `npm run watch` - Start the watcher to monitor typography config changes
 - `npm run build` - Build all configs once (generate tokens and compile CSS)
-- `npm run generate` - Generate tokens for default config only
-- `npm run generate:default` - Generate tokens for default config
+- `npm run generate` - Generate tokens for both docs and editorial configs
+- `npm run generate:docs` - Generate tokens for docs config
 - `npm run generate:editorial` - Generate tokens for editorial config
-- `npm run build:default` - Build CSS for default config only
+- `npm run build:docs` - Build CSS for docs config only
 - `npm run build:editorial` - Build CSS for editorial config only
-- `npm run demo:default` - Open default demo in browser
+- `npm run demo:docs` - Open docs demo in browser
 - `npm run demo:editorial` - Open editorial demo in browser
 
 ### Watcher Script
@@ -244,11 +244,11 @@ The generated SCSS overrides vanilla framework variables:
 
 2. **View the demos:**
    - Open `dist/index.html` to see all available demos
-   - Open `dist/demos/typography-default.html` for the default typescale
+   - Open `dist/demos/typography-docs.html` for the docs typescale
    - Open `dist/demos/typography-editorial.html` for the editorial typescale
 
 3. **Edit the typography configs:**
-   - Modify `config/typography-config.json` to adjust the default typescale
+   - Modify `config/typography-config-docs.json` to adjust the docs typescale
    - Modify `config/typography-config-editorial.json` to adjust the editorial typescale
 
 ## Benefits of Separate Main SCSS Files
@@ -272,12 +272,12 @@ To add a new typescale:
 
 1. **Create a new config file:**
    ```bash
-   cp config/typography-config.json config/typography-config-[name].json
+   cp config/typography-config-docs.json config/typography-config-[name].json
    ```
 
 2. **Create a new main SCSS file:**
    ```bash
-   cp src/main-default.scss src/main-[name].scss
+   cp src/docs/main.scss src/[name]/main.scss
    ```
 
 3. **Edit the new files:**
