@@ -2,11 +2,11 @@ figma.showUI(__html__, { width: 400, height: 600 });
 
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-components') {
-    await generateTypographyComponents(msg.config, msg.baselineUnit, msg.fontFamily, msg.paragraphSize, msg.sampleText);
+    await generateTypographyComponents(msg.config, msg.baselineUnit, msg.fontFamily, msg.paragraphSize);
   }
 };
 
-async function generateTypographyComponents(config, baselineUnit, fontFamily, paragraphSize, sampleText) {
+async function generateTypographyComponents(config, baselineUnit, fontFamily, paragraphSize) {
   try {
     // Load the font - try different style variations
     let loadedFontStyle = null;
@@ -61,9 +61,16 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
     await figma.loadFontAsync({ family: loadedFontFamily, style: loadedFontStyle });
     figma.notify(`Font ${loadedFontFamily} ${loadedFontStyle} is ready for use`);
     
-    // Create separate components for each typography element
-    const components = [];
+    // Create the main auto-layout container
+    const mainContainer = figma.createFrame();
+    mainContainer.name = "Typography Components";
+    mainContainer.layoutMode = "VERTICAL";
+    mainContainer.primaryAxisSizingMode = "AUTO"; // Let width be determined by content
+    mainContainer.counterAxisSizingMode = "AUTO"; // This makes height hug contents
+    mainContainer.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }]; // White background
+    mainContainer.itemSpacing = 0; // No spacing between components
     
+    // Create components for each typography element
     for (let i = 0; i < config.elements.length; i++) {
       const element = config.elements[i];
       
@@ -77,82 +84,52 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       const lineHeight = element.lineHeight;
       const nudgeTop = element.nudgeTop;
       const spaceAfter = element.spaceAfter;
+      const fontWeight = element.fontWeight || 400; // Default to 400 if not specified
       
       // Calculate margin-bottom: spaceAfter - nudgeTop
       const marginBottom = spaceAfter - nudgeTop;
+      
+      // Create meaningful text for this element
+      const configName = element.fontSize === 36 ? "editorial" : "docs";
+      const text = `This is an ${element.identifier} from the ${configName} type scale: fs/lh: ${fontSize}/${lineHeight}px, weight ${fontWeight}`;
       
       // Create the text node AFTER font is loaded
       const textNode = figma.createText();
       textNode.fontName = { family: loadedFontFamily, style: loadedFontStyle };
       textNode.fontSize = fontSize;
       textNode.lineHeight = { value: lineHeight, unit: "PIXELS" };
-      textNode.characters = sampleText; // Set characters AFTER font is set
+      textNode.characters = text; // Set characters AFTER font is set
       
       // Debug: Log which font is being applied
       figma.notify(`Creating component for: ${element.identifier} with ${loadedFontFamily} ${loadedFontStyle}`);
       
-      // Create the auto layout container
-      const container = figma.createFrame();
-      container.name = `${element.identifier} Container`;
-      container.layoutMode = "VERTICAL";
-      container.primaryAxisSizingMode = "AUTO";
-      container.counterAxisSizingMode = "AUTO";
-      container.paddingTop = nudgeTop;
-      container.paddingBottom = marginBottom;
-      
-      // Add the text node to the container
-      container.appendChild(textNode);
-      
-      // Create the component
+      // Create the component directly with text
       const component = figma.createComponent();
       component.name = element.identifier;
-      component.appendChild(container);
+      component.layoutMode = "VERTICAL";
+      component.primaryAxisSizingMode = "AUTO"; // This makes it hug content height
+      component.counterAxisSizingMode = "AUTO"; // Let width be determined by content
+      component.paddingTop = nudgeTop;
+      component.paddingBottom = marginBottom;
+      component.fills = []; // Remove white background from individual components
       
-      components.push(component);
+      // Add the text node directly to the component
+      component.appendChild(textNode);
+      
+      // Add the component directly to the main container
+      mainContainer.appendChild(component);
     }
     
-    // Create a main component with variants
-    const mainComponent = figma.createComponent();
-    mainComponent.name = "Typography Text";
-    
-    // Set up the component properties for variants
-    mainComponent.setProperties({
-      "Typography Style": {
-        type: "VARIANT",
-        value: config.elements[0].identifier
-      }
-    });
-    
-    // Add the first component as the main component's content
-    const firstComponent = components[0];
-    const firstClone = firstComponent.clone();
-    mainComponent.appendChild(firstClone);
-    
-    // Create variants by adding the other components
-    for (let i = 1; i < components.length; i++) {
-      const component = components[i];
-      const clone = component.clone();
-      clone.name = config.elements[i].identifier;
-      
-      // Set the variant property
-      clone.setProperties({
-        "Typography Style": config.elements[i].identifier
-      });
-      
-      // Add to the main component
-      mainComponent.appendChild(clone);
-    }
-    
-    // Position the main component in the center of the viewport
+    // Position the main container in the center of the viewport
     const center = figma.viewport.center;
-    mainComponent.x = center.x - mainComponent.width / 2;
-    mainComponent.y = center.y - mainComponent.height / 2;
+    mainContainer.x = center.x - mainContainer.width / 2;
+    mainContainer.y = center.y - mainContainer.height / 2;
     
-    // Select the main component
-    figma.currentPage.selection = [mainComponent];
-    figma.viewport.scrollAndZoomIntoView([mainComponent]);
+    // Select the main container
+    figma.currentPage.selection = [mainContainer];
+    figma.viewport.scrollAndZoomIntoView([mainContainer]);
     
-    figma.notify(`Generated typography component with ${config.elements.length} variants!`);
+    figma.notify(`Generated Typography components in auto-layout container!`);
     
   } catch (error) {
     figma.notify(`Error: ${error.message}`, { error: true });

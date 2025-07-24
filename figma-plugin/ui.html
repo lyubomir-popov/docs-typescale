@@ -2,11 +2,11 @@
 <html>
 <head>
   <style>
-         body {
-       font-family: "Ubuntu Sans", sans-serif;
-       padding: 20px;
-       margin: 0;
-     }
+    body {
+      font-family: "Ubuntu Sans", sans-serif;
+      padding: 20px;
+      margin: 0;
+    }
     .container {
       display: flex;
       flex-direction: column;
@@ -58,30 +58,25 @@
     <div class="section">
       <label for="config-select">Typography Config:</label>
       <select id="config-select">
-        <option value="default">Default (typography-config.json)</option>
+        <option value="docs">Docs (typography-config-docs.json)</option>
         <option value="editorial">Editorial (typography-config-editorial.json)</option>
       </select>
     </div>
     
-         <!-- Baseline unit is now fixed at 8px based on tokens.json -->
+    <!-- Baseline unit is now fixed at 8px based on tokens.json -->
     
     <div class="section">
       <label for="font-family">Font Family:</label>
-             <input type="text" id="font-family" value="Ubuntu Sans" placeholder="e.g., Ubuntu Sans, Roboto, Arial">
+      <input type="text" id="font-family" value="Ubuntu Sans" placeholder="e.g., Ubuntu Sans, Roboto, Arial">
     </div>
     
-         <div class="section">
-       <label for="paragraph-size">Paragraph Font Size:</label>
-       <select id="paragraph-size">
-         <option value="16">16px (default)</option>
-         <option value="14">14px</option>
-       </select>
-     </div>
-     
-     <div class="section">
-       <label for="sample-text">Sample Text:</label>
-       <input type="text" id="sample-text" value="The quick brown fox jumps over the lazy dog" placeholder="Sample text for components">
-     </div>
+    <div class="section">
+      <label for="paragraph-size">Paragraph Font Size:</label>
+      <select id="paragraph-size">
+        <option value="16">16px (default)</option>
+        <option value="14">14px</option>
+      </select>
+    </div>
     
     <div class="section">
       <label>Configuration Preview:</label>
@@ -92,97 +87,86 @@
   </div>
 
   <script>
-         // Default configurations based on tokens.json
-     const configs = {
-       default: {
-         baselineUnit: 8, // 0.5rem * 16px = 8px
-         elements: [
-           { identifier: "h1", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62 }, // 2rem*16=32px, 3rem*16=48px
-           { identifier: "h2", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62 }, // 2rem*16=32px, 3rem*16=48px
-           { identifier: "h3", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51 }, // 1.5rem*16=24px, 2.5rem*16=40px
-           { identifier: "h4", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51 }, // 1.5rem*16=24px, 2.5rem*16=40px
-           { identifier: "h5", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51 }, // 1.5rem*16=24px, 2rem*16=32px
-           { identifier: "h6", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51 }, // 1.5rem*16=24px, 2rem*16=32px
-           { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 6.56 } // 1rem*16=16px, 1.5rem*16=24px
-         ]
-       },
-       editorial: {
-         baselineUnit: 8, // 0.5rem * 16px = 8px
-         elements: [
-           { identifier: "h1", fontSize: 36, lineHeight: 48, spaceAfter: 16, nudgeTop: 6 }, // 2.25rem*16=36px, 3rem*16=48px
-           { identifier: "h2", fontSize: 36, lineHeight: 40, spaceAfter: 16, nudgeTop: 2 }, // 2.25rem*16=36px, 2.5rem*16=40px
-           { identifier: "h3", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4 }, // 1.5rem*16=24px, 2rem*16=32px
-           { identifier: "h4", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4 }, // 1.5rem*16=24px, 2rem*16=32px
-           { identifier: "h5", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4 }, // 1rem*16=16px, 1.5rem*16=24px
-           { identifier: "h6", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4 }, // 1rem*16=16px, 1.5rem*16=24px
-           { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4 } // 1rem*16=16px, 1.5rem*16=24px
-         ]
-       }
-     };
+    // Configurations based on tokens.json with font weights
+    const configs = {
+      docs: {
+        baselineUnit: 8, // 0.5rem * 16px = 8px
+        elements: [
+          { identifier: "h1", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62, fontWeight: 500 },
+          { identifier: "h2", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62, fontWeight: 400 },
+          { identifier: "h3", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51, fontWeight: 500 },
+          { identifier: "h4", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51, fontWeight: 400 },
+          { identifier: "h5", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51, fontWeight: 500 },
+          { identifier: "h6", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51, fontWeight: 400 },
+          { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 6.56, fontWeight: 400 }
+        ]
+      },
+      editorial: {
+        baselineUnit: 8, // 0.5rem * 16px = 8px
+        elements: [
+          { identifier: "h1", fontSize: 36, lineHeight: 48, spaceAfter: 16, nudgeTop: 6, fontWeight: 500 },
+          { identifier: "h2", fontSize: 36, lineHeight: 40, spaceAfter: 16, nudgeTop: 2, fontWeight: 400 },
+          { identifier: "h3", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4, fontWeight: 500 },
+          { identifier: "h4", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4, fontWeight: 400 },
+          { identifier: "h5", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 500 },
+          { identifier: "h6", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 400 },
+          { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 400 }
+        ]
+      }
+    };
 
-         function updatePreview() {
-       const configSelect = document.getElementById('config-select');
-       const fontFamily = document.getElementById('font-family').value;
-       const paragraphSize = document.getElementById('paragraph-size').value;
-       const sampleText = document.getElementById('sample-text').value;
-       
-       const selectedConfig = configs[configSelect.value];
-       const preview = document.getElementById('config-preview');
-       
-       let previewText = `Config: ${configSelect.value}\n`;
-       previewText += `Baseline Unit: 8px (fixed)\n`;
-       previewText += `Font Family: ${fontFamily}\n`;
-       previewText += `Paragraph Size: ${paragraphSize}px\n\n`;
+    function updatePreview() {
+      const configSelect = document.getElementById('config-select');
+      const fontFamily = document.getElementById('font-family').value;
+      const paragraphSize = document.getElementById('paragraph-size').value;
       
-             selectedConfig.elements.forEach(element => {
-         // Use pre-calculated pixel values from tokens.json
-         let fontSize = element.fontSize;
-         if (element.identifier === 'p') {
-           fontSize = parseInt(paragraphSize);
-         }
-         
-         const lineHeight = element.lineHeight;
-         const nudgeTop = element.nudgeTop;
-         const spaceAfter = element.spaceAfter;
-         
-         previewText += `${element.identifier}:\n`;
-         previewText += `  Font Size: ${fontSize}px\n`;
-         previewText += `  Line Height: ${lineHeight}px\n`;
-         previewText += `  Nudge Top: ${nudgeTop}px\n`;
-         previewText += `  Space After: ${spaceAfter}px\n\n`;
-       });
+      const selectedConfig = configs[configSelect.value];
+      const preview = document.getElementById('config-preview');
+      
+      let previewText = `Config: ${configSelect.value}\n`;
+      previewText += `Baseline Unit: 8px (fixed)\n`;
+      previewText += `Font Family: ${fontFamily}\n`;
+      previewText += `Paragraph Size: ${paragraphSize}px\n\n`;
+      
+      selectedConfig.elements.forEach(element => {
+        // Use pre-calculated pixel values from tokens.json
+        let fontSize = element.fontSize;
+        // Override paragraph font size based on user selection
+        if (element.identifier === 'p') {
+          fontSize = parseInt(paragraphSize);
+        }
+        
+        previewText += `${element.identifier}: ${fontSize}px/${element.lineHeight}px, weight ${element.fontWeight}\n`;
+      });
       
       preview.textContent = previewText;
     }
 
-         // Event listeners
-     document.getElementById('config-select').addEventListener('change', updatePreview);
-     document.getElementById('font-family').addEventListener('input', updatePreview);
-     document.getElementById('paragraph-size').addEventListener('change', updatePreview);
-     document.getElementById('sample-text').addEventListener('input', updatePreview);
-
-         document.getElementById('generate-btn').addEventListener('click', () => {
-       const configSelect = document.getElementById('config-select');
-       const fontFamily = document.getElementById('font-family').value;
-       const paragraphSize = parseInt(document.getElementById('paragraph-size').value);
-       const sampleText = document.getElementById('sample-text').value;
-       
-       const selectedConfig = configs[configSelect.value];
-       
-       parent.postMessage({
-         pluginMessage: {
-           type: 'generate-components',
-           config: selectedConfig,
-           baselineUnit: 8, // Fixed baseline unit
-           fontFamily,
-           paragraphSize,
-           sampleText
-         }
-       }, '*');
-     });
-
-    // Initial preview
+    // Initialize preview
     updatePreview();
+
+    // Add event listeners
+    document.getElementById('config-select').addEventListener('change', updatePreview);
+    document.getElementById('font-family').addEventListener('input', updatePreview);
+    document.getElementById('paragraph-size').addEventListener('change', updatePreview);
+
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      const configSelect = document.getElementById('config-select');
+      const fontFamily = document.getElementById('font-family').value;
+      const paragraphSize = document.getElementById('paragraph-size').value;
+      
+      const selectedConfig = configs[configSelect.value];
+      
+      parent.postMessage({
+        pluginMessage: {
+          type: 'generate-components',
+          config: selectedConfig,
+          baselineUnit: 8,
+          fontFamily: fontFamily,
+          paragraphSize: parseInt(paragraphSize)
+        }
+      }, '*');
+    });
   </script>
 </body>
 </html> 
