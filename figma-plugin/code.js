@@ -2,11 +2,11 @@ figma.showUI(__html__, { width: 400, height: 600 });
 
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'generate-components') {
-    await generateTypographyComponents(msg.config, msg.baselineUnit, msg.fontFamily, msg.paragraphSize);
+    await generateTypographyComponents(msg.config, msg.baselineUnit, msg.fontFamily, msg.paragraphSize, msg.configType);
   }
 };
 
-async function generateTypographyComponents(config, baselineUnit, fontFamily, paragraphSize) {
+async function generateTypographyComponents(config, baselineUnit, fontFamily, paragraphSize, configType) {
   try {
     // Debug: Log the font family we're trying to load
     figma.notify(`Attempting to load font: ${fontFamily}`);
@@ -44,8 +44,7 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       figma.notify(`Padding for ${element.identifier}: top=${nudgeTop}px, bottom=${paddingBottom}px (spaceAfter=${spaceAfter}px - nudgeTop=${nudgeTop}px)`);
       
       // Create meaningful text for this element
-      const configName = element.fontSize === 36 ? "editorial" : "docs";
-      const text = `This is an ${element.identifier} from the ${configName} type scale: fs/lh: ${fontSize}/${lineHeight}px, weight ${fontWeight}`;
+      const text = `This is an ${element.identifier} from the ${configType} type scale: fs/lh: ${fontSize}/${lineHeight}px, weight ${fontWeight}`;
       
       // Load appropriate font style based on weight
       let loadedFontStyle = "Regular";

@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseline Grid Typography Example</title>
+  
+<style>
+
+@font-face {
+  font-family: 'Ubuntu Sans';
+  src: url('fonts/UbuntuSans-Regular.woff') format('woff');
+}
+
+body {
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: #333;
+  position: relative;
+  min-height: 100vh;
+}
+
+
+.u-baseline-grid::after {
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
+  background-image: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
+  background-position-x: initial;
+  background-position-y: initial;
+  background-size: initial;
+  background-repeat: initial;
+  background-attachment: initial;
+  background-origin: initial;
+  background-clip: initial;
+  background-color: initial;
+  background-size: 100% 0.5rem;
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 200;
+}
+
+body {
+  position: relative;
+}
+
+
+body.u-baseline-grid::after {
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
+  background-size: 100% 0.5rem;
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 200;
+}
+
+.h1 {
+  font-size: 2rem;
+  line-height: 3rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 450;
+  font-style: normal;
+  padding-top: 0.28875rem;
+  margin-bottom: 0.21125rem;
+  margin-top: 0;
+}
+
+.h2 {
+  font-size: 2rem;
+  line-height: 3rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  padding-top: 0.28875rem;
+  margin-bottom: 0.21125rem;
+  margin-top: 0;
+}
+
+.h3 {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 450;
+  font-style: normal;
+  padding-top: 0.21917rem;
+  margin-bottom: 0.28083rem;
+  margin-top: 0;
+}
+
+.h4 {
+  font-size: 1.5rem;
+  line-height: 2.5rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 250;
+  font-style: normal;
+  padding-top: 0.21917rem;
+  margin-bottom: 0.28083rem;
+  margin-top: 0;
+}
+
+.h5 {
+  font-size: 1.125rem;
+  line-height: 2rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 450;
+  font-style: normal;
+  padding-top: 0.11056rem;
+  margin-bottom: 0.88944rem;
+  margin-top: 0;
+}
+
+.h6 {
+  font-size: 1.125rem;
+  line-height: 2rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  padding-top: 0.11056rem;
+  margin-bottom: 0.88944rem;
+  margin-top: 0;
+}
+
+.p {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-family: 'Ubuntu Sans', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  padding-top: 0.0775rem;
+  margin-bottom: 0.9225rem;
+  margin-top: 0;
+}
+
+</style>
+
+</head>
+<body class="u-baseline-grid">
+
+  <h1 class="h1">
+    This is an example of h1 using Ubuntu Sans (sans).
+  </h1>
+
+  <h2 class="h2">
+    This is an example of h2 using Ubuntu Sans (sans).
+  </h2>
+
+  <h3 class="h3">
+    This is an example of h3 using Ubuntu Sans (sans).
+  </h3>
+
+  <h4 class="h4">
+    This is an example of h4 using Ubuntu Sans (sans).
+  </h4>
+
+  <h5 class="h5">
+    This is an example of h5 using Ubuntu Sans (sans).
+  </h5>
+
+  <h6 class="h6">
+    This is an example of h6 using Ubuntu Sans (sans).
+  </h6>
+
+  <p class="p">
+    This is an example of p using Ubuntu Sans (sans).
+  </p>
+
+</body>
+</html>

@@ -111,11 +111,14 @@
     // Function to load and parse tokens.json files (which contain calculated nudges)
     async function loadTokens(configType) {
       try {
+        console.log(`Attempting to load tokens from: ../src/${configType}/tokens.json`);
         const response = await fetch(`../src/${configType}/tokens.json`);
         const tokens = await response.json();
+        console.log(`Successfully loaded ${configType} tokens:`, tokens);
         return tokens;
       } catch (error) {
         console.error(`Failed to load ${configType} tokens:`, error);
+        console.log(`Using fallback config for ${configType}`);
         // Fallback to hardcoded values if file can't be loaded
         return getFallbackConfig(configType);
       }
@@ -140,12 +143,12 @@
         return {
           baselineUnit: "0.5rem",
           elements: {
-            h1: { fontSize: "2.25rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.20028rem" },
-            h2: { fontSize: "2.25rem", lineHeight: "2.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.45028rem" },
+            h1: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
+            h2: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
             h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-            h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+            h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+            h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
             p: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" }
           }
         };
@@ -157,6 +160,8 @@
       const elements = [];
       const elementOrder = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
       
+      console.log('Loading tokens:', tokens);
+      
       for (const identifier of elementOrder) {
         const element = tokens.elements[identifier];
         if (element) {
@@ -164,6 +169,8 @@
           if (identifier === 'p') {
             fontSize = paragraphSize;
           }
+          
+          console.log(`${identifier}: fontSize=${element.fontSize} -> ${fontSize}px`);
           
           elements.push({
             identifier: identifier,
@@ -224,15 +231,16 @@
         await updatePreview();
       }
       
-      parent.postMessage({
-        pluginMessage: {
-          type: 'generate-components',
-          config: currentConfig,
-          baselineUnit: currentConfig.baselineUnit,
-          fontFamily: fontFamily,
-          paragraphSize: parseInt(paragraphSize)
-        }
-      }, '*');
+             parent.postMessage({
+         pluginMessage: {
+           type: 'generate-components',
+           config: currentConfig,
+           baselineUnit: currentConfig.baselineUnit,
+           fontFamily: fontFamily,
+           paragraphSize: parseInt(paragraphSize),
+           configType: document.getElementById('config-select').value
+         }
+       }, '*');
     });
   </script>
 </body>

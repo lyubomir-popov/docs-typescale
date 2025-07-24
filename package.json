@@ -6,8 +6,8 @@
     "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/dist/demos/typography-docs.html --entry-file=dist/demos/typography-docs.html --watch=dist\"",
     "watch": "node scripts/watch.js",
     "generate": "npm run generate:docs && npm run generate:editorial",
-    "generate:docs": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-docs.json",
-    "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json",
+    "generate:docs": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-docs.json src/docs",
+    "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json src/editorial",
     "build:docs": "sass --load-path=node_modules src/docs/main.scss:dist/css/docs.css --style=compressed",
     "build:editorial": "sass --load-path=node_modules src/editorial/main.scss:dist/css/editorial.css --style=compressed",
     "demo:docs": "open dist/demos/typography-docs.html",
@@ -19,6 +19,7 @@
     "sass": "^1.69.5"
   },
   "dependencies": {
-    "@lyubomir-popov/baseline-nudge-generator": "^1.4.0"
+    "@lyubomir-popov/baseline-nudge-generator": "^1.4.1",
+    "vanilla-framework": "^4.26.1"
   }
 }
