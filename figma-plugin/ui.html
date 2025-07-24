@@ -67,7 +67,8 @@
     
     <div class="section">
       <label for="font-family">Font Family:</label>
-      <input type="text" id="font-family" value="Ubuntu Sans" placeholder="e.g., Ubuntu Sans, Roboto, Arial">
+      <input type="text" id="font-family" value="Ubuntu Sans" placeholder="e.g., Ubuntu Sans, Inter, Roboto, Arial (use variable fonts for custom weights)">
+      <small style="color: #666; font-size: 10px;">Note: Custom weights (450, 200, etc.) require a variable font. Try "Inter" or "Roboto" for better weight support.</small>
     </div>
     
     <div class="section">
@@ -87,56 +88,121 @@
   </div>
 
   <script>
-    // Configurations based on tokens.json with font weights
-    const configs = {
-      docs: {
-        baselineUnit: 8, // 0.5rem * 16px = 8px
-        elements: [
-          { identifier: "h1", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62, fontWeight: 500 },
-          { identifier: "h2", fontSize: 32, lineHeight: 48, spaceAfter: 8, nudgeTop: 4.62, fontWeight: 400 },
-          { identifier: "h3", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51, fontWeight: 500 },
-          { identifier: "h4", fontSize: 24, lineHeight: 40, spaceAfter: 8, nudgeTop: 3.51, fontWeight: 400 },
-          { identifier: "h5", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51, fontWeight: 500 },
-          { identifier: "h6", fontSize: 24, lineHeight: 32, spaceAfter: 16, nudgeTop: 7.51, fontWeight: 400 },
-          { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 6.56, fontWeight: 400 }
-        ]
-      },
-      editorial: {
-        baselineUnit: 8, // 0.5rem * 16px = 8px
-        elements: [
-          { identifier: "h1", fontSize: 36, lineHeight: 48, spaceAfter: 16, nudgeTop: 6, fontWeight: 500 },
-          { identifier: "h2", fontSize: 36, lineHeight: 40, spaceAfter: 16, nudgeTop: 2, fontWeight: 400 },
-          { identifier: "h3", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4, fontWeight: 500 },
-          { identifier: "h4", fontSize: 24, lineHeight: 32, spaceAfter: 8, nudgeTop: 4, fontWeight: 400 },
-          { identifier: "h5", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 500 },
-          { identifier: "h6", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 400 },
-          { identifier: "p", fontSize: 16, lineHeight: 24, spaceAfter: 16, nudgeTop: 4, fontWeight: 400 }
-        ]
+    // Function to convert rem to pixels
+    function remToPx(rem) {
+      return Math.round(parseFloat(rem) * 16);
+    }
+    
+    // Function to convert rem to pixels for line height
+    function remToPxLineHeight(rem) {
+      return Math.round(parseFloat(rem) * 16);
+    }
+    
+    // Function to convert rem to pixels for spacing
+    function remToPxSpacing(rem) {
+      return Math.round(parseFloat(rem) * 16);
+    }
+    
+    // Function to convert rem to pixels for nudge
+    function remToPxNudge(rem) {
+      return Math.round(parseFloat(rem) * 16 * 10) / 10; // Keep one decimal place
+    }
+    
+    // Function to load and parse config files directly
+    async function loadConfig(configType) {
+      try {
+        const response = await fetch(`../config/typography-config-${configType}.json`);
+        const config = await response.json();
+        return config;
+      } catch (error) {
+        console.error(`Failed to load ${configType} config:`, error);
+        // Fallback to hardcoded values if file can't be loaded
+        return getFallbackConfig(configType);
       }
-    };
-
-    function updatePreview() {
+    }
+    
+    // Fallback configs in case config files can't be loaded
+    function getFallbackConfig(configType) {
+      if (configType === 'docs') {
+        return {
+          baselineUnit: 0.5,
+          elements: [
+            { identifier: "h1", fontSize: 2, lineHeight: 6, spaceAfter: 1, fontWeight: 450, fontStyle: "normal" },
+            { identifier: "h2", fontSize: 2, lineHeight: 6, spaceAfter: 1, fontWeight: 200, fontStyle: "normal" },
+            { identifier: "h3", fontSize: 1.5, lineHeight: 5, spaceAfter: 1, fontWeight: 450, fontStyle: "normal" },
+            { identifier: "h4", fontSize: 1.5, lineHeight: 5, spaceAfter: 1, fontWeight: 250, fontStyle: "normal" },
+            { identifier: "h5", fontSize: 1.125, lineHeight: 4, spaceAfter: 2, fontWeight: 450, fontStyle: "normal" },
+            { identifier: "h6", fontSize: 1.125, lineHeight: 4, spaceAfter: 2, fontWeight: 300, fontStyle: "normal" },
+            { identifier: "p", fontSize: 0.875, lineHeight: 2.5, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" }
+          ]
+        };
+      } else {
+        return {
+          baselineUnit: 0.5,
+          elements: [
+            { identifier: "h1", fontSize: 2.25, lineHeight: 6, spaceAfter: 2, fontWeight: 500, fontStyle: "normal" },
+            { identifier: "h2", fontSize: 2.25, lineHeight: 5, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" },
+            { identifier: "h3", fontSize: 1.5, lineHeight: 4, spaceAfter: 1, fontWeight: 500, fontStyle: "normal" },
+            { identifier: "h4", fontSize: 1.5, lineHeight: 4, spaceAfter: 1, fontWeight: 400, fontStyle: "normal" },
+            { identifier: "h5", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 500, fontStyle: "normal" },
+            { identifier: "h6", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" },
+            { identifier: "p", fontSize: 1, lineHeight: 3, spaceAfter: 2, fontWeight: 400, fontStyle: "normal" }
+          ]
+        };
+      }
+    }
+    
+    // Function to convert config to plugin format
+    function configToPluginFormat(config, paragraphSize) {
+      const elements = [];
+      
+      for (const element of config.elements) {
+        let fontSize = element.fontSize * 16; // Convert rem to px
+        if (element.identifier === 'p') {
+          fontSize = paragraphSize;
+        }
+        
+        const lineHeight = element.lineHeight * 8; // Convert baseline units to px (baseline unit * 16)
+        const spaceAfter = element.spaceAfter * 8; // Convert baseline units to px
+        const nudgeTop = element.nudgeTop * 8; // Convert baseline units to px (if nudgeTop exists)
+        
+        elements.push({
+          identifier: element.identifier,
+          fontSize: fontSize,
+          lineHeight: lineHeight,
+          spaceAfter: spaceAfter,
+          nudgeTop: nudgeTop || 0,
+          fontWeight: element.fontWeight || 400,
+          fontStyle: element.fontStyle || "normal"
+        });
+      }
+      
+      return {
+        baselineUnit: config.baselineUnit * 16, // Convert to px
+        elements: elements
+      };
+    }
+    
+    let currentConfig = null;
+    
+    async function updatePreview() {
       const configSelect = document.getElementById('config-select');
       const fontFamily = document.getElementById('font-family').value;
       const paragraphSize = document.getElementById('paragraph-size').value;
       
-      const selectedConfig = configs[configSelect.value];
+      const configType = configSelect.value;
+      const config = await loadConfig(configType);
+      currentConfig = configToPluginFormat(config, parseInt(paragraphSize));
+      
       const preview = document.getElementById('config-preview');
       
-      let previewText = `Config: ${configSelect.value}\n`;
-      previewText += `Baseline Unit: 8px (fixed)\n`;
+      let previewText = `Config: ${configType}\n`;
+      previewText += `Baseline Unit: ${currentConfig.baselineUnit}px (fixed)\n`;
       previewText += `Font Family: ${fontFamily}\n`;
       previewText += `Paragraph Size: ${paragraphSize}px\n\n`;
       
-      selectedConfig.elements.forEach(element => {
-        // Use pre-calculated pixel values from tokens.json
-        let fontSize = element.fontSize;
-        // Override paragraph font size based on user selection
-        if (element.identifier === 'p') {
-          fontSize = parseInt(paragraphSize);
-        }
-        
-        previewText += `${element.identifier}: ${fontSize}px/${element.lineHeight}px, weight ${element.fontWeight}\n`;
+      currentConfig.elements.forEach(element => {
+        previewText += `${element.identifier}: ${element.fontSize}px/${element.lineHeight}px, weight ${element.fontWeight}\n`;
       });
       
       preview.textContent = previewText;
@@ -150,18 +216,19 @@
     document.getElementById('font-family').addEventListener('input', updatePreview);
     document.getElementById('paragraph-size').addEventListener('change', updatePreview);
 
-    document.getElementById('generate-btn').addEventListener('click', () => {
-      const configSelect = document.getElementById('config-select');
+    document.getElementById('generate-btn').addEventListener('click', async () => {
       const fontFamily = document.getElementById('font-family').value;
       const paragraphSize = document.getElementById('paragraph-size').value;
       
-      const selectedConfig = configs[configSelect.value];
+      if (!currentConfig) {
+        await updatePreview();
+      }
       
       parent.postMessage({
         pluginMessage: {
           type: 'generate-components',
-          config: selectedConfig,
-          baselineUnit: 8,
+          config: currentConfig,
+          baselineUnit: currentConfig.baselineUnit,
           fontFamily: fontFamily,
           paragraphSize: parseInt(paragraphSize)
         }

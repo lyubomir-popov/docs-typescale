@@ -8,58 +8,8 @@ figma.ui.onmessage = async (msg) => {
 
 async function generateTypographyComponents(config, baselineUnit, fontFamily, paragraphSize) {
   try {
-    // Load the font - try different style variations
-    let loadedFontStyle = null;
-    let loadedFontFamily = fontFamily;
-    const fontStyles = ["Regular", "Normal", "400", ""];
-    
     // Debug: Log the font family we're trying to load
     figma.notify(`Attempting to load font: ${fontFamily}`);
-    
-    // First try the specified font family
-    for (const style of fontStyles) {
-      try {
-        await figma.loadFontAsync({ family: fontFamily, style: style });
-        loadedFontStyle = style;
-        figma.notify(`Successfully loaded: ${fontFamily} ${style}`);
-        break;
-      } catch (error) {
-        figma.notify(`Failed to load: ${fontFamily} ${style} - ${error.message}`);
-        // Try next style
-        continue;
-      }
-    }
-    
-    // If the specified font family failed, try fallback fonts
-    if (!loadedFontStyle) {
-      figma.notify(`Font ${fontFamily} not found, trying fallback fonts...`);
-      const fallbackFonts = ["Inter", "Arial", "Helvetica", "Roboto"];
-      
-      for (const fallbackFont of fallbackFonts) {
-        for (const style of fontStyles) {
-          try {
-            await figma.loadFontAsync({ family: fallbackFont, style: style });
-            loadedFontStyle = style;
-            loadedFontFamily = fallbackFont;
-            figma.notify(`Successfully loaded fallback: ${fallbackFont} ${style}`);
-            break;
-          } catch (error) {
-            figma.notify(`Failed fallback: ${fallbackFont} ${style} - ${error.message}`);
-            continue;
-          }
-        }
-        if (loadedFontStyle) break;
-      }
-    }
-    
-    // If still no font loaded, throw error
-    if (!loadedFontStyle) {
-      throw new Error(`Could not load font: ${fontFamily} or any fallback fonts. Please make sure a font is available in Figma.`);
-    }
-    
-    // Ensure the font is fully loaded before proceeding
-    await figma.loadFontAsync({ family: loadedFontFamily, style: loadedFontStyle });
-    figma.notify(`Font ${loadedFontFamily} ${loadedFontStyle} is ready for use`);
     
     // Create the main auto-layout container
     const mainContainer = figma.createFrame();
@@ -85,6 +35,7 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       const nudgeTop = element.nudgeTop;
       const spaceAfter = element.spaceAfter;
       const fontWeight = element.fontWeight || 400; // Default to 400 if not specified
+      const fontStyle = element.fontStyle || "normal";
       
       // Calculate margin-bottom: spaceAfter - nudgeTop
       const marginBottom = spaceAfter - nudgeTop;
@@ -93,6 +44,67 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       const configName = element.fontSize === 36 ? "editorial" : "docs";
       const text = `This is an ${element.identifier} from the ${configName} type scale: fs/lh: ${fontSize}/${lineHeight}px, weight ${fontWeight}`;
       
+      // Load appropriate font style based on weight
+      let loadedFontStyle = "Regular";
+      let loadedFontFamily = fontFamily;
+      
+      // Map weight to standard font style names that Figma supports
+      let targetStyle = "Regular";
+      if (fontWeight <= 100) targetStyle = "Thin";
+      else if (fontWeight <= 200) targetStyle = "ExtraLight";
+      else if (fontWeight <= 300) targetStyle = "Light";
+      else if (fontWeight <= 400) targetStyle = "Regular";
+      else if (fontWeight <= 500) targetStyle = "Medium";
+      else if (fontWeight <= 600) targetStyle = "SemiBold";
+      else if (fontWeight <= 700) targetStyle = "Bold";
+      else if (fontWeight <= 800) targetStyle = "ExtraBold";
+      else targetStyle = "Black";
+      
+      // For weight 200, try multiple light style names
+      let styleAttempts = [targetStyle, "Regular"];
+      if (fontWeight <= 200) {
+        styleAttempts = ["ExtraLight", "UltraLight", "Light", "Regular"];
+      }
+      
+      let fontLoaded = false;
+      for (const style of styleAttempts) {
+        try {
+          await figma.loadFontAsync({ family: fontFamily, style: style });
+          loadedFontStyle = style;
+          figma.notify(`Successfully loaded: ${fontFamily} ${style} for weight ${fontWeight}`);
+          fontLoaded = true;
+          break;
+        } catch (error) {
+          // Try next style
+          continue;
+        }
+      }
+      
+      // If the specified font family failed, try fallback fonts
+      if (!fontLoaded) {
+        figma.notify(`Font ${fontFamily} not found, trying fallback fonts...`);
+        const fallbackFonts = ["Inter", "Arial", "Helvetica", "Roboto"];
+        
+        for (const fallbackFont of fallbackFonts) {
+          try {
+            await figma.loadFontAsync({ family: fallbackFont, style: "Regular" });
+            loadedFontStyle = "Regular";
+            loadedFontFamily = fallbackFont;
+            figma.notify(`Successfully loaded fallback: ${fallbackFont} Regular`);
+            fontLoaded = true;
+            break;
+          } catch (error) {
+            figma.notify(`Failed fallback: ${fallbackFont} Regular - ${error.message}`);
+            continue;
+          }
+        }
+      }
+      
+      // If still no font loaded, throw error
+      if (!fontLoaded) {
+        throw new Error(`Could not load font: ${fontFamily} or any fallback fonts. Please make sure a font is available in Figma.`);
+      }
+      
       // Create the text node AFTER font is loaded
       const textNode = figma.createText();
       textNode.fontName = { family: loadedFontFamily, style: loadedFontStyle };
@@ -100,8 +112,11 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, pa
       textNode.lineHeight = { value: lineHeight, unit: "PIXELS" };
       textNode.characters = text; // Set characters AFTER font is set
       
+      // Try to set font weight using plugin data (for reference)
+      textNode.setPluginData("intendedFontWeight", fontWeight.toString());
+      
       // Debug: Log which font is being applied
-      figma.notify(`Creating component for: ${element.identifier} with ${loadedFontFamily} ${loadedFontStyle}`);
+      figma.notify(`Creating component for: ${element.identifier} with ${loadedFontFamily} ${loadedFontStyle}, intended weight ${fontWeight}`);
       
       // Create the component directly with text
       const component = figma.createComponent();
