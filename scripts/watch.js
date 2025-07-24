@@ -113,9 +113,6 @@ function updateVanillaOverrides(tokens, configName) {
 // Generated from baseline nudge generator tokens
 // Last updated: ${new Date().toISOString()}
 
-// Font family from config
-$font-family-base: '${tokens.font}', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-
 // Baseline unit from config
 $baseline-unit: ${parseFloat(tokens.baselineUnit)}rem;
 
@@ -163,7 +160,6 @@ function generateBaselineStyles(tokens, configName) {
   padding-top: ${nudgeTop}rem;
   margin-bottom: ${marginBottom}rem;
   margin-top: 0;
-  font-family: $font-family-base;
 }
 
 `;
@@ -192,25 +188,13 @@ function generateDemoHTML(configName, cssPath) {
     <style>
         body {
             margin: 0;
-            padding: 2rem;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         .demo-container {
             max-width: 800px;
             margin: 0 auto;
             position: relative;
         }
-        .baseline-grid {
-            background: linear-gradient(to top, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.15) 1px, transparent 1px, transparent);
-            background-size: 100% var(--baseline-unit, 0.5rem);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
+
         .content {
             position: relative;
             z-index: 2;
@@ -232,34 +216,41 @@ function generateDemoHTML(configName, cssPath) {
         }
     </style>
 </head>
-<body>
+<body class="u-baseline-grid">
     <button class="toggle-grid" onclick="toggleGrid()">Toggle Baseline Grid</button>
     
     <div class="demo-container">
-        <div class="baseline-grid" id="baseline-grid"></div>
         <div class="content">
+            <hr>
             <h1>Typography Demo - ${configName.charAt(0).toUpperCase() + configName.slice(1)}</h1>
             
             <p>This is a demonstration of the ${configName} typescale. The baseline grid overlay shows how text aligns to the baseline grid.</p>
             
+            <hr>
             <h2>Heading Level 2</h2>
             <p>This paragraph demonstrates the spacing and alignment between headings and paragraphs. The baseline grid ensures consistent vertical rhythm throughout the document.</p>
             
+            <hr>
             <h3>Heading Level 3</h3>
             <p>Each heading level has been carefully calibrated to maintain proper spacing and alignment. The baseline unit provides a consistent foundation for all typography.</p>
             
+            <hr>
             <h4>Heading Level 4</h4>
             <p>Notice how all text elements align perfectly to the baseline grid. This creates a harmonious visual rhythm that improves readability and overall design quality.</p>
             
+            <hr>
             <h5>Heading Level 5</h5>
             <p>The spacing between elements is calculated based on the baseline unit, ensuring consistent vertical rhythm. This approach works well for both short and long-form content.</p>
             
+            <hr>
             <h6>Heading Level 6</h6>
             <p>This typescale is designed specifically for ${configName} content. The font sizes, line heights, and spacing have been optimized for this particular use case.</p>
             
+            <hr>
             <h2>Another Section</h2>
             <p>You can toggle the baseline grid overlay using the button in the top-right corner. This helps visualize how the typography aligns to the baseline grid.</p>
             
+            <hr>
             <h3>Technical Details</h3>
             <p>The baseline grid is calculated using the baseline unit from the configuration. Each text element includes precise padding-top values to ensure perfect alignment.</p>
         </div>
@@ -267,8 +258,8 @@ function generateDemoHTML(configName, cssPath) {
 
     <script>
         function toggleGrid() {
-            const grid = document.getElementById('baseline-grid');
-            grid.style.display = grid.style.display === 'none' ? 'block' : 'none';
+            const body = document.body;
+            body.classList.toggle('u-baseline-grid');
         }
     </script>
 </body>
@@ -327,18 +318,25 @@ ensureDirectories();
 
 // Watch all relevant files for both demos
 const watchPaths = [
-  path.join(process.cwd(), CONFIG_DIR, 'typography-config-*.json'),
+  path.join(process.cwd(), CONFIG_DIR, '*.json'),
   path.join(process.cwd(), 'src/default/*.scss'),
   path.join(process.cwd(), 'src/editorial/*.scss'),
   path.join(process.cwd(), 'src/default/main.scss'),
   path.join(process.cwd(), 'src/editorial/main.scss')
 ];
 
+console.log('👀 Watching paths:');
+watchPaths.forEach(path => console.log(`   ${path}`));
+
 const watcher = chokidar.watch(watchPaths, {
   persistent: true,
   ignoreInitial: false,
   usePolling: true,
-  interval: 1000
+  interval: 500, // More frequent polling
+  awaitWriteFinish: {
+    stabilityThreshold: 100,
+    pollInterval: 100
+  }
 });
 
 watcher.on('change', (filePath) => {

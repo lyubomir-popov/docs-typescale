@@ -5,7 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build outputs
-dist/
+# dist/ - removed to allow dist folder to be tracked
 *.css.map
 
 # Generated files

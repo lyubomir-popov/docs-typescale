@@ -1,0 +1,11 @@
+EXCEL FORMULA (COPY THIS SINGLE LINE):
+
+=LET(f0,A2,ratio,B2,n,C2,rounding,D2,i,ROW()-2,value,f0*POWER(ratio,(i-1)/(n-1)),rounded_value,IF(rounding=0,value,IF(rounding=1,ROUND(value,0),IF(rounding=2,FLOOR(value,1),IF(rounding=3,ROUND(value*2,0)/2,value)))),rounded_value)
+
+SETUP:
+- Row 1: Headers
+- Row 2: A2=6, B2=2, C2=30, D2=3
+- Row 3: Paste the formula above in E3
+- Copy E3 down to E32
+
+This will give you the type scale values starting from 6.0, 7.0, 8.0, 9.0, 10.5, etc. 

@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "🔄 Rebuilding both demos..." && npm run generate:default && cp dist/tokens.json src/default/tokens.json && npm run build:default && npm run generate:editorial && cp dist/tokens.json src/editorial/tokens.json && npm run build:editorial && echo "✅ Both demos rebuilt successfully!" 

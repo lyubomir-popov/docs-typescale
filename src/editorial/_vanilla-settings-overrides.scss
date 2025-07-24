@@ -15,17 +15,21 @@
 // Based on: https://github.com/canonical/vanilla-framework/pull/5521/files
 
 // Responsive font sizes using calc() - clear start and end points
-// Start: 13px (0.8125rem) at 0px
-// End: 14px (0.875rem) at 1400px
-$fs-start-size: 0.75rem;  // 12px
-$fs-end-size: 0.875rem;      // 14px
-$fs-breakpoint: 1800px;      // End breakpoint
+// Start: 12px at 0px
+// End: 14px at 1600px
+$fs-start-size-unitless: 0.75;  // 12px / 16px = 0.75
+$fs-end-size-unitless: 0.875;   // 14px / 16px = 0.875
+$fs-breakpoint: 100rem;   // End breakpoint (1600px / 16px = 100rem)
 
-// Calculate the vw slope manually: (14px - 12px) / (1400px / 100) = 2px / 14vw = 0.1428vw
-$fs-vw-slope: 0.1428vw;
+// Calculate the vw slope using unitless values
+// Convert breakpoint to vw units: 1600px = 16vw
+$fs-breakpoint-vw: ($fs-breakpoint / 100);
+// Calculate unitless slope: (0.875 - 0.75) = 0.125 (unitless)
+$fs-slope-unitless: $fs-end-size-unitless - $fs-start-size-unitless;
+$fs-vw-slope: calc(#{$fs-slope-unitless} * 1vw);
 
 // Formula: start_size + vw_slope
-$fs-calculation: calc($fs-start-size + $fs-vw-slope);
+$fs-calculation: calc(#{$fs-start-size-unitless}rem + $fs-vw-slope);
 
 $base-font-sizes: (
   base: $fs-calculation,

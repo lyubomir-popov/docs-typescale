@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Type Scale Examples</title>
+  <style>
+    @font-face {
+      font-family: 'Ubuntu Sans';
+      src: url('fonts/UbuntuSans-Regular.woff') format('woff');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Ubuntu Sans', sans-serif;
+      font-weight: 400;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+
+    .description {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .example-card {
+      margin-bottom: 2rem;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fafafa;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .example-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .example-card h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .example-card p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .example-link {
+      display: inline-block;
+      background: #3498db;
+      color: white;
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .example-link:hover {
+      background: #2980b9;
+    }
+
+    .info-box {
+      background: #e8f4fd;
+      padding: 15px;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+      margin: 1rem 0;
+    }
+
+    .formula {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 1rem 0;
+      border-left: 4px solid #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Type Scale Examples</h1>
+    <div class="description">
+      Interactive examples demonstrating typographic scale calculations and visual applications.
+    </div>
+
+    <div class="info-box">
+      <strong>About Type Scales:</strong> Typographic scales provide harmonious font size relationships 
+      using mathematical formulas or traditional harmonic ratios. They ensure consistent visual hierarchy 
+      and improve readability across different text sizes.
+    </div>
+
+    <div class="formula">
+      <strong>Continuous Formula:</strong> f(i) = f(0) × pow(ratio, i/n)<br>
+      <strong>Classic Scale:</strong> Discrete octaves with harmonic ratios (7/6, 4/3, 3/2, 7/4)
+    </div>
+
+    <div class="example-card">
+      <h2>Type Scale Calculator</h2>
+      <p>
+        Interactive calculator that demonstrates both continuous formula and classic typographic scale calculations. 
+        Compare different approaches and see how rounding affects the results.
+      </p>
+      <a href="type-scale-calculator.html" class="example-link">Open Calculator</a>
+    </div>
+
+    <div class="example-card">
+      <h2>Type Scale Demo</h2>
+      <p>
+        Visual demonstration of typographic scales applied to actual text. See how different scales 
+        look in practice with real typography examples.
+      </p>
+      <a href="type-scale-demo.html" class="example-link">Open Demo</a>
+    </div>
+
+    <div class="info-box">
+      <strong>Features:</strong>
+      <ul>
+        <li>Switch between continuous formula and classic scale</li>
+        <li>Different rounding options (none, floor, round, 0.5)</li>
+        <li>Real-time calculations</li>
+        <li>Visual comparison of approaches</li>
+        <li>Practical typography examples</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html> 

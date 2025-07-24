@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Type Scale Calculator</title>
+  <style>
+    @font-face {
+      font-family: 'Ubuntu Sans';
+      src: url('fonts/UbuntuSans-Regular.woff') format('woff');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Ubuntu Sans', sans-serif;
+      font-weight: 400;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+
+    .description {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .calculator-section {
+      margin-bottom: 3rem;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+
+    .results {
+      margin-top: 2rem;
+      padding: 20px;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .scale-values {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .scale-value {
+      padding: 10px;
+      background: #ecf0f1;
+      border-radius: 4px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .comparison-section {
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: white;
+    }
+
+    .comparison-section h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .formula {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      margin: 1rem 0;
+      border-left: 4px solid #3498db;
+    }
+
+    .info-box {
+      background: #e8f4fd;
+      padding: 15px;
+      border-radius: 4px;
+      border-left: 4px solid #3498db;
+      margin: 1rem 0;
+    }
+
+    .error {
+      color: #e74c3c;
+      background: #fdf2f2;
+      padding: 10px;
+      border-radius: 4px;
+      border-left: 4px solid #e74c3c;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Type Scale Calculator</h1>
+    <div class="description">
+      Calculate typographic scales using the continuous formula f(i) = f(0) × pow(ratio, i/n) 
+      or the classic typographic scale with discrete octaves.
+    </div>
+
+    <div class="calculator-section">
+      <h2>Calculator</h2>
+      <div class="form-group">
+        <label for="mode">Scale Type:</label>
+        <select id="mode">
+          <option value="continuous">Continuous Formula</option>
+          <option value="classic">Classic Typographic Scale</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="f0">Starting Value (f0):</label>
+        <input type="number" id="f0" value="6" step="0.1" min="0.1">
+      </div>
+      
+      <div class="form-group" id="ratioGroup">
+        <label for="ratio">Ratio:</label>
+        <input type="number" id="ratio" value="2" step="0.1" min="0.1">
+      </div>
+      
+      <div class="form-group">
+        <label for="n">Number of Values (n):</label>
+        <input type="number" id="n" value="5" min="1" max="50">
+      </div>
+      
+      <div class="form-group">
+        <label for="rounding">Rounding:</label>
+        <select id="rounding">
+          <option value="none">No Rounding</option>
+          <option value="floor">Floor (Round Down)</option>
+          <option value="round">Round to Integer</option>
+          <option value="0.5" selected>Round to 0.5</option>
+        </select>
+      </div>
+      
+      <button onclick="calculateScale()">Calculate Scale</button>
+    </div>
+
+    <div class="results" id="results" style="display: none;">
+      <h3>Results</h3>
+      <div id="scaleValues" class="scale-values"></div>
+    </div>
+
+    <div class="comparison" id="comparison" style="display: none;">
+      <div class="comparison-section">
+        <h3>Continuous Formula</h3>
+        <div class="formula">f(i) = f(0) × pow(ratio, i/n) within discrete octaves</div>
+        <div class="info-box">
+          Uses the mathematical formula within discrete octaves of 5 elements each.
+          Each octave doubles the starting value, with continuous progression within each octave.
+        </div>
+        <div id="continuousValues" class="scale-values"></div>
+      </div>
+      
+      <div class="comparison-section">
+        <h3>Classic Typographic Scale</h3>
+        <div class="formula">Discrete octaves with harmonic ratios</div>
+        <div class="info-box">
+          Uses discrete octaves of 5 elements each, with specific harmonic ratios:
+          7/6, 4/3, 3/2, 7/4. Each octave doubles the starting value.
+        </div>
+        <div id="classicValues" class="scale-values"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Type scale calculation functions
+    function calculateContinuousScale(f0, ratio, n, rounding) {
+      const values = [];
+      for (let i = 0; i < n; i++) {
+        // Calculate which octave we're in (same as classic scale)
+        const octave = Math.floor(i / 5);
+        const positionInOctave = i % 5;
+        
+        // Calculate the starting value for this octave
+        const octaveStart = f0 * Math.pow(2, octave);
+        
+        // Calculate using the formula: f(i) = f(0) * pow(ratio, i/n) within the octave
+        let value = octaveStart * Math.pow(ratio, positionInOctave / 5);
+        values.push(applyRounding(value, rounding));
+      }
+      return values;
+    }
+
+    function calculateClassicScale(f0, n, rounding) {
+      const values = [];
+      for (let i = 0; i < n; i++) {
+        const octave = Math.floor(i / 5);
+        const positionInOctave = i % 5;
+        const octaveStart = f0 * Math.pow(2, octave);
+        
+        let value;
+        switch (positionInOctave) {
+          case 0: value = octaveStart; break;
+          case 1: value = octaveStart * 7 / 6; break;
+          case 2: value = octaveStart * 4 / 3; break;
+          case 3: value = octaveStart * 3 / 2; break;
+          case 4: value = octaveStart * 7 / 4; break;
+        }
+        
+        values.push(applyRounding(value, rounding));
+      }
+      return values;
+    }
+
+    function applyRounding(value, rounding) {
+      switch (rounding) {
+        case 'floor':
+          return Math.floor(value);
+        case 'round':
+          return Math.round(value);
+        case '0.5':
+          return Math.round(value * 2) / 2;
+        default:
+          return parseFloat(value.toFixed(4));
+      }
+    }
+
+    function displayValues(values, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      
+      values.forEach((value, index) => {
+        const div = document.createElement('div');
+        div.className = 'scale-value';
+        div.textContent = `f(${index}) = ${value}`;
+        container.appendChild(div);
+      });
+    }
+
+    function calculateScale() {
+      const mode = document.getElementById('mode').value;
+      const f0 = parseFloat(document.getElementById('f0').value);
+      const ratio = parseFloat(document.getElementById('ratio').value);
+      const n = parseInt(document.getElementById('n').value);
+      const rounding = document.getElementById('rounding').value;
+
+      // Validation
+      if (isNaN(f0) || isNaN(n) || (mode === 'continuous' && isNaN(ratio))) {
+        document.getElementById('results').innerHTML = '<div class="error">Please enter valid numbers for all fields.</div>';
+        document.getElementById('results').style.display = 'block';
+        return;
+      }
+
+      let values;
+      if (mode === 'continuous') {
+        values = calculateContinuousScale(f0, ratio, n, rounding);
+      } else {
+        values = calculateClassicScale(f0, n, rounding);
+      }
+
+      displayValues(values, 'scaleValues');
+      document.getElementById('results').style.display = 'block';
+
+      // Show comparison if we have both modes
+      if (mode === 'continuous') {
+        const classicValues = calculateClassicScale(f0, n, rounding);
+        displayValues(values, 'continuousValues');
+        displayValues(classicValues, 'classicValues');
+        document.getElementById('comparison').style.display = 'grid';
+      } else {
+        const continuousValues = calculateContinuousScale(f0, ratio, n, rounding);
+        displayValues(continuousValues, 'continuousValues');
+        displayValues(values, 'classicValues');
+        document.getElementById('comparison').style.display = 'grid';
+      }
+    }
+
+    // Toggle ratio field visibility based on mode
+    document.getElementById('mode').addEventListener('change', function() {
+      const ratioGroup = document.getElementById('ratioGroup');
+      if (this.value === 'classic') {
+        ratioGroup.style.display = 'none';
+      } else {
+        ratioGroup.style.display = 'block';
+      }
+    });
+
+    // Calculate on page load
+    window.addEventListener('load', calculateScale);
+  </script>
+</body>
+</html> 

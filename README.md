@@ -2,6 +2,62 @@
 
 A project that uses the baseline nudge generator to create multiple typescale examples and override vanilla framework variables for precise typographic alignment.
 
+## Type Scale Calculator
+
+This project includes a unified type scale calculator that demonstrates both continuous mathematical formulas and classic typographic scales.
+
+### Shell Script Usage
+
+The `unified-type-scale.sh` script provides two approaches to type scale calculation:
+
+#### Continuous Formula
+Uses the mathematical formula `f(i) = f(0) × pow(ratio, i/n)` with discrete octaves:
+
+```bash
+./unified-type-scale.sh continuous <f0> <ratio> <n> [rounding]
+```
+
+**Example:**
+```bash
+./unified-type-scale.sh continuous 6 2 30 round
+```
+
+This calculates 30 members using the continuous formula with ratio=2, starting from 6, rounded to integers.
+
+#### Classic Typographic Scale
+Uses discrete octaves with harmonic ratios (7/6, 4/3, 3/2, 7/4):
+
+```bash
+./unified-type-scale.sh classic <f0> <n> [rounding]
+```
+
+**Example:**
+```bash
+./unified-type-scale.sh classic 6 30 round
+```
+
+### Rounding Options
+
+- `none` - No rounding (4 decimal places)
+- `floor` - Round down to integer
+- `round` - Round to nearest integer
+- `0.5` - Round to nearest 0.5 (default)
+
+### Web Examples
+
+The `dist/demos/` folder contains interactive web examples:
+
+- **`type-scale-calculator.html`** - Interactive calculator with real-time comparisons
+- **`type-scale-demo.html`** - Visual demonstration of scales applied to typography
+- **`type-scale-examples.html`** - Index page linking to all examples
+
+### Key Differences
+
+- **Continuous Formula**: Uses mathematical progression within discrete octaves
+- **Classic Scale**: Uses specific harmonic ratios (7/6, 4/3, 3/2, 7/4) within octaves
+- Both approaches use the same octave structure (5 members per octave)
+- Values are within margin of error when using the same parameters
+
 ## How the Project Works
 
 ### Multiple Typescale Configurations
@@ -287,8 +343,10 @@ The baseline nudge generator calculates precise CSS nudges needed to align text 
 Edit the `elements` array in any config file:
 
 - `fontSize`: Font size in rem units
-- `lineHeight`: Line height in baseline units
-- `spaceAfter`: Space after element in baseline units
+- `lineHeight`: Line height in baseline units (supports fractional values like 2.5)
+- `spaceAfter`: Space after element in baseline units (supports fractional values)
+
+**Note:** The baseline-nudge-generator now supports fractional line heights and spacing values (multiples of 0.5), allowing for more precise typographic control.
 
 ### Adjusting Paragraph + Heading Spacing
 

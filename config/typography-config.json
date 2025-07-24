@@ -1,6 +1,11 @@
 {
   "baselineUnit": 0.4375,
-  "fontFile": "../fonts/UbuntuSans-Regular.woff",
+  "fontFiles": [
+    {
+      "family": "sans",
+      "path": "../fonts/UbuntuSans-Regular.woff"
+    }
+  ],
   "elements": [
     {
       "identifier": "h1",
@@ -40,8 +45,8 @@
     },
     {
       "identifier": "p",
-      "fontSize": 1,
-      "lineHeight": 3,
+      "fontSize": 0.875,
+      "lineHeight": 2.5,
       "spaceAfter": 2
     }
   ]
