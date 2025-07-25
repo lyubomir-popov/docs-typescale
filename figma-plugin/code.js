@@ -99,42 +99,79 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
       textNode.lineHeight = { value: lineHeight, unit: "PIXELS" };
       textNode.characters = text; // Set characters AFTER font is set
       
-      // Apply font weight using named styles with fallbacks
+      // NEW APPROACH: Try variable binding using the colleague's method
       let weightApplied = false;
       
-      // Map weight to named style with multiple fallback options
-      let styleAttempts = [];
-      
-      if (fontWeight <= 100) {
-        styleAttempts = ["Thin", "UltraLight", "ExtraLight", "Light", "Regular"];
-      } else if (fontWeight <= 200) {
-        styleAttempts = ["ExtraLight", "UltraLight", "Light", "Regular"];
-      } else if (fontWeight <= 300) {
-        styleAttempts = ["Light", "Regular"];
-      } else if (fontWeight <= 400) {
-        styleAttempts = ["Regular", "Normal"];
-      } else if (fontWeight <= 500) {
-        styleAttempts = ["Medium", "Regular"];
-      } else if (fontWeight <= 600) {
-        styleAttempts = ["SemiBold", "Medium", "Bold"];
-      } else if (fontWeight <= 700) {
-        styleAttempts = ["Bold", "SemiBold", "Medium"];
-      } else if (fontWeight <= 800) {
-        styleAttempts = ["ExtraBold", "Bold", "SemiBold"];
-      } else {
-        styleAttempts = ["Black", "ExtraBold", "Bold"];
-      }
-      
-      for (const style of styleAttempts) {
-        try {
-          await figma.loadFontAsync({ family: loadedFontFamily, style: style });
-          textNode.fontName = { family: loadedFontFamily, style: style };
-          figma.notify(`Applied ${style} style for weight ${fontWeight} to ${element.identifier}`);
-          weightApplied = true;
-          break;
-        } catch (styleError) {
-          // Try next style
-          continue;
+      try {
+        // Step 1: Get or create variable collection
+        const collections = await figma.variables.getLocalVariableCollectionsAsync();
+        let collection = collections.find((c) => c.name === "Typography Variables");
+        
+        if (!collection) {
+          collection = figma.variables.createVariableCollection("Typography Variables");
+        }
+        
+        // Step 2: Create or get existing font weight variable
+        const existingVariables = await figma.variables.getLocalVariablesAsync("FLOAT");
+        let fontWeightVar = existingVariables.find(
+          (v) => v.name === `FontWeight${fontWeight}` && v.variableCollectionId === collection.id
+        );
+        
+        if (!fontWeightVar) {
+          // Create new variable if it doesn't exist
+          fontWeightVar = figma.variables.createVariable(
+            `FontWeight${fontWeight}`,
+            collection,
+            "FLOAT"
+          );
+        }
+        
+        // Set the value
+        const defaultModeId = collection.modes[0].modeId;
+        fontWeightVar.setValueForMode(defaultModeId, fontWeight);
+        
+        // Step 3: Bind the font weight to the variable using setBoundVariable
+        textNode.setBoundVariable("fontWeight", fontWeightVar);
+        
+        figma.notify(`✅ Applied variable font weight ${fontWeight} to ${element.identifier}`);
+        weightApplied = true;
+      } catch (variableError) {
+        figma.notify(`❌ Variable binding failed for ${element.identifier}: ${variableError.message}`);
+        
+        // Fallback to named styles
+        let styleAttempts = [];
+        
+        if (fontWeight <= 100) {
+          styleAttempts = ["Thin", "UltraLight", "ExtraLight", "Light", "Regular"];
+        } else if (fontWeight <= 200) {
+          styleAttempts = ["ExtraLight", "UltraLight", "Light", "Regular"];
+        } else if (fontWeight <= 300) {
+          styleAttempts = ["Light", "Regular"];
+        } else if (fontWeight <= 400) {
+          styleAttempts = ["Regular", "Normal"];
+        } else if (fontWeight <= 500) {
+          styleAttempts = ["Medium", "Regular"];
+        } else if (fontWeight <= 600) {
+          styleAttempts = ["SemiBold", "Medium", "Bold"];
+        } else if (fontWeight <= 700) {
+          styleAttempts = ["Bold", "SemiBold", "Medium"];
+        } else if (fontWeight <= 800) {
+          styleAttempts = ["ExtraBold", "Bold", "SemiBold"];
+        } else {
+          styleAttempts = ["Black", "ExtraBold", "Bold"];
+        }
+        
+        for (const style of styleAttempts) {
+          try {
+            await figma.loadFontAsync({ family: loadedFontFamily, style: style });
+            textNode.fontName = { family: loadedFontFamily, style: style };
+            figma.notify(`Applied ${style} style for weight ${fontWeight} to ${element.identifier}`);
+            weightApplied = true;
+            break;
+          } catch (styleError) {
+            // Try next style
+            continue;
+          }
         }
       }
       
@@ -172,7 +209,7 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
     figma.currentPage.selection = [mainContainer];
     figma.viewport.scrollAndZoomIntoView([mainContainer]);
     
-    figma.notify(`Generated Typography components!`);
+    figma.notify(`Generated Typography components with variable font weights!`);
     
   } catch (error) {
     figma.notify(`Error: ${error.message}`, { error: true });
