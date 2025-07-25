@@ -68,15 +68,7 @@
     <div class="section">
       <label for="font-family">Font Family:</label>
       <input type="text" id="font-family" value="Ubuntu Sans" placeholder="e.g., Ubuntu Sans, Inter, Roboto, Arial (use variable fonts for custom weights)">
-      <small style="color: #666; font-size: 10px;">Note: Custom weights (450, 200, etc.) require a variable font. Try "Inter" or "Roboto" for better weight support.</small>
-    </div>
-    
-    <div class="section">
-      <label for="paragraph-size">Paragraph Font Size:</label>
-      <select id="paragraph-size">
-        <option value="16">16px (default)</option>
-        <option value="14">14px</option>
-      </select>
+      <small style="color: #666; font-size: 10px;">Variable font weights (450, 200, 250, etc.) are now supported! Use "Inter", "Roboto", or any variable font for precise weight control.</small>
     </div>
     
     <div class="section">
@@ -108,55 +100,46 @@
       return Math.round(parseFloat(rem) * 16 * 10) / 10; // Keep one decimal place
     }
     
-    // Function to load and parse tokens.json files (which contain calculated nudges)
-    async function loadTokens(configType) {
-      try {
-        console.log(`Attempting to load tokens from: ../src/${configType}/tokens.json`);
-        const response = await fetch(`../src/${configType}/tokens.json`);
-        const tokens = await response.json();
-        console.log(`Successfully loaded ${configType} tokens:`, tokens);
-        return tokens;
-      } catch (error) {
-        console.error(`Failed to load ${configType} tokens:`, error);
-        console.log(`Using fallback config for ${configType}`);
-        // Fallback to hardcoded values if file can't be loaded
-        return getFallbackConfig(configType);
+    // Embedded tokens data (since Figma plugins can't access local files)
+    const TOKENS_DATA = {
+      docs: {
+        baselineUnit: "0.5rem",
+        elements: {
+          h1: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.28875rem" },
+          h2: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.28875rem" },
+          h3: { fontSize: "1.5rem", lineHeight: "2.5rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.21917rem" },
+          h4: { fontSize: "1.5rem", lineHeight: "2.5rem", fontWeight: 250, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.21917rem" },
+          h5: { fontSize: "1.125rem", lineHeight: "1.5rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.36056rem" },
+          h6: { fontSize: "1.125rem", lineHeight: "1.5rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.36056rem" },
+          p: { fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.0775rem" }
+        }
+      },
+      editorial: {
+        baselineUnit: "0.5rem",
+        elements: {
+          h1: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
+          h2: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
+          h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+          h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
+          h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+          h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
+          p: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" }
+        }
       }
-    }
+    };
     
-    // Fallback configs in case tokens.json can't be loaded
-    function getFallbackConfig(configType) {
-      if (configType === 'docs') {
-        return {
-          baselineUnit: "0.5rem",
-          elements: {
-            h1: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.20028rem" },
-            h2: { fontSize: "2rem", lineHeight: "2.5rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.45028rem" },
-            h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 250, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h5: { fontSize: "1.125rem", lineHeight: "1.75rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-            h6: { fontSize: "1.125rem", lineHeight: "1.75rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-            p: { fontSize: "0.875rem", lineHeight: "1.09375rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.03063rem" }
-          }
-        };
-      } else {
-        return {
-          baselineUnit: "0.5rem",
-          elements: {
-            h1: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
-            h2: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
-            h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-            h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-            h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-            p: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" }
-          }
-        };
+    // Function to load tokens (now uses embedded data)
+    async function loadTokens(configType) {
+      const tokens = TOKENS_DATA[configType];
+      if (!tokens) {
+        throw new Error(`No tokens data available for ${configType} config.`);
       }
+      console.log(`Loaded ${configType} tokens:`, tokens);
+      return tokens;
     }
     
     // Function to convert tokens to plugin format
-    function tokensToPluginFormat(tokens, paragraphSize) {
+    function tokensToPluginFormat(tokens) {
       const elements = [];
       const elementOrder = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
       
@@ -165,10 +148,7 @@
       for (const identifier of elementOrder) {
         const element = tokens.elements[identifier];
         if (element) {
-          let fontSize = remToPx(element.fontSize);
-          if (identifier === 'p') {
-            fontSize = paragraphSize;
-          }
+          const fontSize = remToPx(element.fontSize);
           
           console.log(`${identifier}: fontSize=${element.fontSize} -> ${fontSize}px`);
           
@@ -195,24 +175,28 @@
     async function updatePreview() {
       const configSelect = document.getElementById('config-select');
       const fontFamily = document.getElementById('font-family').value;
-      const paragraphSize = document.getElementById('paragraph-size').value;
       
       const configType = configSelect.value;
-      const tokens = await loadTokens(configType);
-      currentConfig = tokensToPluginFormat(tokens, parseInt(paragraphSize));
-      
       const preview = document.getElementById('config-preview');
       
-      let previewText = `Config: ${configType}\n`;
-      previewText += `Baseline Unit: ${currentConfig.baselineUnit}px (fixed)\n`;
-      previewText += `Font Family: ${fontFamily}\n`;
-      previewText += `Paragraph Size: ${paragraphSize}px\n\n`;
-      
-      currentConfig.elements.forEach(element => {
-        previewText += `${element.identifier}: ${element.fontSize}px/${element.lineHeight}px, weight ${element.fontWeight}\n`;
-      });
-      
-      preview.textContent = previewText;
+      try {
+        const tokens = await loadTokens(configType);
+        currentConfig = tokensToPluginFormat(tokens);
+        
+        let previewText = `Config: ${configType}\n`;
+        previewText += `Baseline Unit: ${currentConfig.baselineUnit}px (fixed)\n`;
+        previewText += `Font Family: ${fontFamily}\n\n`;
+        
+        currentConfig.elements.forEach(element => {
+          previewText += `${element.identifier}: ${element.fontSize}px/${element.lineHeight}px, weight ${element.fontWeight}\n`;
+        });
+        
+        preview.textContent = previewText;
+      } catch (error) {
+        console.error('Error loading tokens:', error);
+        preview.textContent = `Error: ${error.message}\n\nPlease ensure the tokens.json file exists and is accessible.`;
+        currentConfig = null;
+      }
     }
 
     // Initialize preview
@@ -221,26 +205,27 @@
     // Add event listeners
     document.getElementById('config-select').addEventListener('change', updatePreview);
     document.getElementById('font-family').addEventListener('input', updatePreview);
-    document.getElementById('paragraph-size').addEventListener('change', updatePreview);
 
     document.getElementById('generate-btn').addEventListener('click', async () => {
       const fontFamily = document.getElementById('font-family').value;
-      const paragraphSize = document.getElementById('paragraph-size').value;
       
       if (!currentConfig) {
         await updatePreview();
+        if (!currentConfig) {
+          alert('Cannot generate components: tokens could not be loaded. Please check the configuration preview for errors.');
+          return;
+        }
       }
       
-             parent.postMessage({
-         pluginMessage: {
-           type: 'generate-components',
-           config: currentConfig,
-           baselineUnit: currentConfig.baselineUnit,
-           fontFamily: fontFamily,
-           paragraphSize: parseInt(paragraphSize),
-           configType: document.getElementById('config-select').value
-         }
-       }, '*');
+      parent.postMessage({
+        pluginMessage: {
+          type: 'generate-components',
+          config: currentConfig,
+          baselineUnit: currentConfig.baselineUnit,
+          fontFamily: fontFamily,
+          configType: document.getElementById('config-select').value
+        }
+      }, '*');
     });
   </script>
 </body>

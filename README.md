@@ -72,31 +72,45 @@ The project now supports **multiple typescale configurations** for different use
 Each typescale has its own configuration file following the pattern `config/typography-config-[name].json`. This is where you define:
 
 - **Baseline unit** (`baselineUnit`): The fundamental spacing unit
-- **Font file** (`fontFile`): Path to the font file for metrics extraction
+- **Font files** (`fontFiles`): Array of font file definitions with family and path
 - **Typography elements** (`elements`): Array of heading and paragraph definitions with:
   - `fontSize`: Font size in rem units
   - `lineHeight`: Line height in baseline units  
   - `spaceAfter`: Space after element in baseline units
+  - `fontWeight`: **Variable font weight** (100-900, supports precise values like 450, 200, 250)
+  - `fontStyle`: Font style (normal, italic)
+  - `fontFamily`: Font family reference
 
 Example configurations:
 
 **Default (Documentation):**
 ```json
 {
-  "baselineUnit": 0.4375,
-  "fontFile": "../fonts/UbuntuSans-Regular.woff",
+  "baselineUnit": 0.5,
+  "fontFiles": [
+    {
+      "family": "sans",
+      "path": "../fonts/UbuntuSans-Regular.woff"
+    }
+  ],
   "elements": [
     {
       "identifier": "h1",
       "fontSize": 2,
       "lineHeight": 6,
-      "spaceAfter": 1
+      "spaceAfter": 1,
+      "fontFamily": "sans",
+      "fontWeight": 450,
+      "fontStyle": "normal"
     },
     {
       "identifier": "p",
-      "fontSize": 1,
-      "lineHeight": 3,
-      "spaceAfter": 2
+      "fontSize": 0.875,
+      "lineHeight": 2.5,
+      "spaceAfter": 2,
+      "fontFamily": "sans",
+      "fontWeight": 400,
+      "fontStyle": "normal"
     }
   ]
 }
@@ -106,19 +120,30 @@ Example configurations:
 ```json
 {
   "baselineUnit": 0.5,
-  "fontFile": "../fonts/UbuntuSans-Regular.woff",
+  "fontFiles": [
+    {
+      "family": "sans",
+      "path": "../fonts/UbuntuSans-Regular.woff"
+    }
+  ],
   "elements": [
     {
       "identifier": "h1",
       "fontSize": 2.5,
       "lineHeight": 6,
-      "spaceAfter": 2
+      "spaceAfter": 2,
+      "fontFamily": "sans",
+      "fontWeight": 600,
+      "fontStyle": "normal"
     },
     {
       "identifier": "p",
       "fontSize": 1.125,
       "lineHeight": 4,
-      "spaceAfter": 2
+      "spaceAfter": 2,
+      "fontFamily": "sans",
+      "fontWeight": 400,
+      "fontStyle": "normal"
     }
   ]
 }
@@ -321,6 +346,31 @@ $fs-vw-slope: 0.1428vw;   // Calculated slope
 $fs-calculation: calc($fs-start-size + $fs-vw-slope);
 ```
 
+## Variable Font Weight Support
+
+This project fully supports **variable font weights** with precise numeric values (100-900). Unlike traditional font weights limited to named values (light, normal, bold), variable fonts allow for:
+
+- **Precise weight control**: Values like 450, 200, 250, 350, etc.
+- **Smooth transitions**: Any weight between 100-900
+- **Better typography**: More nuanced weight variations for better hierarchy
+
+### Variable Font Weight Examples
+
+```json
+{
+  "fontWeight": 450,  // Between normal (400) and medium (500)
+  "fontWeight": 200,  // Very light weight
+  "fontWeight": 250,  // Light weight
+  "fontWeight": 350,  // Between light (300) and normal (400)
+  "fontWeight": 600,  // Semi-bold
+  "fontWeight": 700   // Bold
+}
+```
+
+### Browser Support
+
+Variable font weights work in all modern browsers that support CSS `font-weight` with numeric values. The generated CSS uses the exact weight values from your config without any conversion.
+
 ## Baseline Nudge Generator
 
 The baseline nudge generator calculates precise CSS nudges needed to align text to a baseline grid. It:
@@ -329,6 +379,7 @@ The baseline nudge generator calculates precise CSS nudges needed to align text 
 - Calculates exact padding-top values for baseline alignment
 - Generates design tokens for use in CSS frameworks
 - Creates interactive HTML demos with baseline grid overlay
+- **Supports variable font weights** with precise numeric values
 
 ## Customization
 
