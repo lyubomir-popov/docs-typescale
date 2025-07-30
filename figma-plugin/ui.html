@@ -101,32 +101,130 @@
     }
     
     // Embedded tokens data (since Figma plugins can't access local files)
-    const TOKENS_DATA = {
-      docs: {
-        baselineUnit: "0.5rem",
-        elements: {
-          h1: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.28875rem" },
-          h2: { fontSize: "2rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.28875rem" },
-          h3: { fontSize: "1.5rem", lineHeight: "2.5rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.21917rem" },
-          h4: { fontSize: "1.5rem", lineHeight: "2.5rem", fontWeight: 250, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.21917rem" },
-          h5: { fontSize: "1.125rem", lineHeight: "1.5rem", fontWeight: 450, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.36056rem" },
-          h6: { fontSize: "1.125rem", lineHeight: "1.5rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.36056rem" },
-          p: { fontSize: "0.875rem", lineHeight: "1.25rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.0775rem" }
-        }
+                                    const TOKENS_DATA = {
+      "docs": {
+            "baselineUnit": "0.5rem",
+            "elements": {
+                  "h1": {
+                        "fontSize": "2rem",
+                        "lineHeight": "2.5rem",
+                        "fontWeight": 500,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.03875rem"
+                  },
+                  "h2": {
+                        "fontSize": "2rem",
+                        "lineHeight": "2.5rem",
+                        "fontWeight": 300,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.03875rem"
+                  },
+                  "h3": {
+                        "fontSize": "1.5rem",
+                        "lineHeight": "2rem",
+                        "fontWeight": 500,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.46917rem"
+                  },
+                  "h4": {
+                        "fontSize": "1.5rem",
+                        "lineHeight": "2rem",
+                        "fontWeight": 300,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.46917rem"
+                  },
+                  "h5": {
+                        "fontSize": "1.125rem",
+                        "lineHeight": "1.5rem",
+                        "fontWeight": 500,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.36056rem"
+                  },
+                  "h6": {
+                        "fontSize": "1.125rem",
+                        "lineHeight": "1.5rem",
+                        "fontWeight": 300,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.36056rem"
+                  },
+                  "p": {
+                        "fontSize": "0.875rem",
+                        "lineHeight": "1.25rem",
+                        "fontWeight": 400,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.0775rem"
+                  }
+            }
       },
-      editorial: {
-        baselineUnit: "0.5rem",
-        elements: {
-          h1: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
-          h2: { fontSize: "2.625rem", lineHeight: "3rem", fontWeight: 200, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.06881rem" },
-          h3: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 500, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-          h4: { fontSize: "1.5rem", lineHeight: "2rem", fontWeight: 300, fontStyle: "normal", spaceAfter: "0.5rem", nudgeTop: "0.46917rem" },
-          h5: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-          h6: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 550, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" },
-          p: { fontSize: "1rem", lineHeight: "1.5rem", fontWeight: 400, fontStyle: "normal", spaceAfter: "1rem", nudgeTop: "0.41rem" }
-        }
+      "editorial": {
+            "baselineUnit": "0.5rem",
+            "elements": {
+                  "h1": {
+                        "fontSize": "2.625rem",
+                        "lineHeight": "3rem",
+                        "fontWeight": 500,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.06881rem"
+                  },
+                  "h2": {
+                        "fontSize": "2.625rem",
+                        "lineHeight": "3rem",
+                        "fontWeight": 200,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.06881rem"
+                  },
+                  "h3": {
+                        "fontSize": "1.5rem",
+                        "lineHeight": "2rem",
+                        "fontWeight": 500,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.46917rem"
+                  },
+                  "h4": {
+                        "fontSize": "1.5rem",
+                        "lineHeight": "2rem",
+                        "fontWeight": 300,
+                        "fontStyle": "normal",
+                        "spaceAfter": "0.5rem",
+                        "nudgeTop": "0.46917rem"
+                  },
+                  "h5": {
+                        "fontSize": "1rem",
+                        "lineHeight": "1.5rem",
+                        "fontWeight": 550,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.41rem"
+                  },
+                  "h6": {
+                        "fontSize": "1rem",
+                        "lineHeight": "1.5rem",
+                        "fontWeight": 550,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.41rem"
+                  },
+                  "p": {
+                        "fontSize": "1rem",
+                        "lineHeight": "1.5rem",
+                        "fontWeight": 400,
+                        "fontStyle": "normal",
+                        "spaceAfter": "1rem",
+                        "nudgeTop": "0.41rem"
+                  }
+            }
       }
-    };
+};
     
     // Function to load tokens (now uses embedded data)
     async function loadTokens(configType) {

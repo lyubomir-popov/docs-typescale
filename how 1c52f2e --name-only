@@ -1,0 +1,10 @@
+[33m1c52f2e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmultiple-typescales[m[33m, [m[1;31morigin/multiple-typescales[m[33m)[m figma plugin now works with variable font weights defined in numbers
+[33m4ae9267[m feat: implement multi-typescale architecture with Figma plugin v45
+[33m74b3053[m Fix vanilla-framework dependency and restore build functionality
+[33mb3ec7fc[m Update npm scripts and README to use 'docs' terminology
+[33m01e5405[m Fix Figma plugin padding calculation
+[33m0a2f993[m Fix Figma plugin font weight mapping and config reading
+[33m1fcfb8f[m Fix Figma plugin auto-layout and rename default to docs
+[33m13303b0[m Complete typography scale project with working Figma plugin
+[33m4ccfd8b[m Fix baseline grid alignment: use correct nudges from generator, collocate tokens.json with each demo
+[33m3ab3012[m Fix baseline grid: use u-baseline-grid utility class instead of custom CSS in demo HTML files

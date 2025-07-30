@@ -10,37 +10,37 @@
     {
       "identifier": "h1",
       "fontSize": 2,
-      "lineHeight": 6,
+      "lineHeight": 5,
       "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 450,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
       "identifier": "h2",
       "fontSize": 2,
-      "lineHeight": 6,
+      "lineHeight": 5,
       "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 200,
+      "fontWeight": 300,
       "fontStyle": "normal"
     },
     {
       "identifier": "h3",
       "fontSize": 1.5,
-      "lineHeight": 5,
+      "lineHeight": 4,
       "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 450,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
       "identifier": "h4",
       "fontSize": 1.5,
-      "lineHeight": 5,
+      "lineHeight": 4,
       "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 250,
+      "fontWeight": 300,
       "fontStyle": "normal"
     },
     {
@@ -49,7 +49,7 @@
       "lineHeight": 3,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 450,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {

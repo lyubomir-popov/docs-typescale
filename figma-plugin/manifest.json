@@ -1,10 +1,12 @@
 {
-  "name": "Typography Scale Generator v46",
-  "id": "typography-scale-generator-v46",
+  "name": "Typography Scale Generator v63",
+  "id": "typography-scale-generator-v63",
   "api": "1.0.0",
+  "version": "1.0.1",
   "main": "code.js",
   "ui": "ui.html",
   "editorType": ["figma"],
+  "enablePrivatePluginApi": false,
   "networkAccess": {
     "allowedDomains": ["none"]
   }

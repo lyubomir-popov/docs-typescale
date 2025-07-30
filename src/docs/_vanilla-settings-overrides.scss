@@ -23,7 +23,7 @@ $fs-breakpoint: 90rem;   // End breakpoint (1600px / 16px = 100rem)
 
 // Calculate the vw slope using unitless values
 // Convert breakpoint to vw units: 1600px = 16vw
-$fs-breakpoint-vw: ($fs-breakpoint / 100);
+$fs-breakpoint-vw: math.div($fs-breakpoint, 100);
 // Calculate unitless slope: (0.875 - 0.75) = 0.125 (unitless)
 $fs-slope-unitless: $fs-end-size-unitless - $fs-start-size-unitless;
 $fs-vw-slope: calc(#{$fs-slope-unitless} * 1vw);

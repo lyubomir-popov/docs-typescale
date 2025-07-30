@@ -276,10 +276,23 @@ function generateDemoHTML(configName, cssPath) {
   }
 }
 
+function updatePluginTokens() {
+  try {
+    console.log('🔄 Updating Figma plugin tokens...');
+    execSync('node scripts/update-plugin-tokens.js', { stdio: 'inherit' });
+    console.log('✅ Plugin tokens updated');
+  } catch (error) {
+    console.error('❌ Failed to update plugin tokens:', error.message);
+  }
+}
+
 function processConfig(configPath) {
   console.log(`\n🔄 Processing typography config: ${configPath}`);
   
   createVanillaOverrides(configPath);
+  
+  // Update plugin tokens for all configs
+  updatePluginTokens();
   
   console.log(`✅ Processing complete for ${configPath}\n`);
 }
@@ -319,9 +332,9 @@ ensureDirectories();
 // Watch all relevant files for both demos
 const watchPaths = [
   path.join(process.cwd(), CONFIG_DIR, '*.json'),
-  path.join(process.cwd(), 'src/default/*.scss'),
+  path.join(process.cwd(), 'src/docs/*.scss'),
   path.join(process.cwd(), 'src/editorial/*.scss'),
-  path.join(process.cwd(), 'src/default/main.scss'),
+  path.join(process.cwd(), 'src/docs/main.scss'),
   path.join(process.cwd(), 'src/editorial/main.scss')
 ];
 
