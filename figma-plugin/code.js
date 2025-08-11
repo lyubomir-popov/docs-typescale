@@ -57,7 +57,20 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
       const lineHeight = remToPx(element.lineHeight);
       const nudgeTop = remToPx(element.nudgeTop || 0);
       const spaceAfter = remToPx(element.spaceAfter || 0);
-      const fontWeight = element.fontWeight || 400; // Default to 400 if not specified
+      // Map numeric fontWeight to Figma named weights
+      var fontWeightMap = {
+        100: "Thin",
+        200: "ExtraLight",
+        300: "Light",
+        400: "Regular",
+        500: "Medium",
+        600: "SemiBold",
+        700: "Bold",
+        800: "ExtraBold",
+        900: "Black"
+      };
+      var fontWeight = element.fontWeight;
+      var fontWeightName = fontWeightMap[fontWeight] || (typeof fontWeight === "string" ? fontWeight : "Regular");
       const fontStyle = element.fontStyle || "normal";
       
       // Calculate bottom padding: spaceAfter - nudgeTop
@@ -152,15 +165,18 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
       try {
         // Step 1: Get or create variable collection
         const collections = await figma.variables.getLocalVariableCollectionsAsync();
-        let collection = collections.find(function(c) { return c.name === "Typography Variables"; });
+        let collection = collections.find((c) => c.name === "Typography Variables");
+        
         if (!collection) {
           collection = figma.variables.createVariableCollection("Typography Variables");
         }
+        
         // Step 2: Create or get existing font weight variable
         const existingVariables = await figma.variables.getLocalVariablesAsync("FLOAT");
-        let fontWeightVar = existingVariables.find(function(v) {
-          return v.name === `FontWeight${fontWeight}` && v.variableCollectionId === collection.id;
-        });
+        let fontWeightVar = existingVariables.find(
+          (v) => v.name === `FontWeight${fontWeight}` && v.variableCollectionId === collection.id
+        );
+        
         if (!fontWeightVar) {
           // Create new variable if it doesn't exist
           fontWeightVar = figma.variables.createVariable(
@@ -169,19 +185,19 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
             "FLOAT"
           );
         }
+        
         // Set the value
         const defaultModeId = collection.modes[0].modeId;
         fontWeightVar.setValueForMode(defaultModeId, fontWeight);
+        
         // Step 3: Bind the font weight to the variable using setBoundVariable
-        try {
-          textNode.setBoundVariable("fontWeight", fontWeightVar);
-          figma.notify(`✅ Applied variable font weight ${fontWeight} to ${element.identifier}`);
-          weightApplied = true;
-        } catch (bindError) {
-          figma.notify(`❌ Variable binding failed for ${element.identifier} (fontWeight): ${bindError.message}`);
-        }
+        textNode.setBoundVariable("fontWeight", fontWeightVar);
+        
+        figma.notify(`✅ Applied variable font weight ${fontWeight} to ${element.identifier}`);
+        weightApplied = true;
       } catch (variableError) {
-        figma.notify(`❌ Variable setup failed for ${element.identifier}: ${variableError.message}`);
+        figma.notify(`❌ Variable binding failed for ${element.identifier}: ${variableError.message}`);
+        
         // Fallback to named styles
         let styleAttempts = [];
         
@@ -245,4 +261,5 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
   } catch (error) {
     figma.notify(`Error: ${error.message}`, { error: true });
   }
-} 
+}
+// ...existing code...

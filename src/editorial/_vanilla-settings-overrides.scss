@@ -11,6 +11,9 @@
 // MANUAL VANILLA FRAMEWORK OVERRIDES
 // =============================================================================
 
+// Import Sass math module for division operations
+@use "sass:math";
+
 // Override vanilla font size settings for responsive typography
 // Based on: https://github.com/canonical/vanilla-framework/pull/5521/files
 
