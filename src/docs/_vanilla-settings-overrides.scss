@@ -34,11 +34,12 @@ $fs-vw-slope: calc(#{$fs-slope-unitless} * 1vw);
 // Formula: start_size + vw_slope
 $fs-calculation: calc(#{$fs-start-size-unitless}rem + $fs-vw-slope);
 
+
 $base-font-sizes: (
-  base: $fs-calculation,
-  large: $fs-calculation,
+  base: 1rem,
+  large: 1rem,
 );
 
 // Override vanilla's default font sizes to be responsive
-$font-size-base: $fs-calculation;
-$font-size-largescreen: $fs-calculation;
+$font-size-base: 1rem;
+$font-size-largescreen: 1rem;

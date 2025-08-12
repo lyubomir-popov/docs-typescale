@@ -6,71 +6,30 @@ figma.ui.onmessage = async (msg) => {
   }
 };
 
-// Helper function to convert rem to pixels (assuming 16px = 1rem)
-function remToPx(remValue) {
-  if (typeof remValue === 'string' && remValue.includes('rem')) {
-    const rem = parseFloat(remValue.replace('rem', ''));
-    return Math.round(rem * 16);
-  } else if (typeof remValue === 'number') {
-    return Math.round(remValue * 16);
-  }
-  return remValue; // Return as-is if not rem
-}
-
 async function generateTypographyComponents(config, baselineUnit, fontFamily, configType) {
   try {
     // Debug: Log the font family we're trying to load
     figma.notify(`Attempting to load font: ${fontFamily}`);
     
-    // Create the main auto-layout container as a Frame
+    // Create the main auto-layout container
     const mainContainer = figma.createFrame();
     mainContainer.name = `Type scale – ${configType}`;
     mainContainer.layoutMode = "VERTICAL";
-    mainContainer.primaryAxisSizingMode = "FIXED"; // Fixed width
-    mainContainer.counterAxisSizingMode = "AUTO"; // Height hugs contents
-    mainContainer.width = 800; // Set a fixed width
+    mainContainer.primaryAxisSizingMode = "AUTO"; // Let width be determined by content
+    mainContainer.counterAxisSizingMode = "AUTO"; // This makes height hug contents
     mainContainer.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }]; // White background
     mainContainer.itemSpacing = 0; // No spacing between components
     
-    // Handle both array and object formats for elements
-    let elements = [];
-    if (Array.isArray(config.elements)) {
-      elements = config.elements;
-    } else if (typeof config.elements === 'object') {
-      // Convert object to array format (ES5 compatible)
-      elements = Object.entries(config.elements).map(function(entry) {
-        var identifier = entry[0];
-        var element = entry[1];
-        var obj = Object.assign({ identifier: identifier }, element);
-        return obj;
-      });
-    } else {
-      throw new Error('Invalid elements format in config');
-    }
-    
     // Create components for each typography element
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
+    for (let i = 0; i < config.elements.length; i++) {
+      const element = config.elements[i];
       
-      // Convert rem values to pixels
-      const fontSize = remToPx(element.fontSize);
-      const lineHeight = remToPx(element.lineHeight);
-      const nudgeTop = remToPx(element.nudgeTop || 0);
-      const spaceAfter = remToPx(element.spaceAfter || 0);
-      // Map numeric fontWeight to Figma named weights
-      var fontWeightMap = {
-        100: "Thin",
-        200: "ExtraLight",
-        300: "Light",
-        400: "Regular",
-        500: "Medium",
-        600: "SemiBold",
-        700: "Bold",
-        800: "ExtraBold",
-        900: "Black"
-      };
-      var fontWeight = element.fontWeight;
-      var fontWeightName = fontWeightMap[fontWeight] || (typeof fontWeight === "string" ? fontWeight : "Regular");
+      // Use pre-calculated pixel values from tokens.json
+      const fontSize = element.fontSize;
+      const lineHeight = element.lineHeight;
+      const nudgeTop = element.nudgeTop;
+      const spaceAfter = element.spaceAfter;
+      const fontWeight = element.fontWeight || 400; // Default to 400 if not specified
       const fontStyle = element.fontStyle || "normal";
       
       // Calculate bottom padding: spaceAfter - nudgeTop
@@ -133,33 +92,14 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
         throw new Error(`Could not load font: ${fontFamily} or any fallback fonts. Please make sure a font is available in Figma.`);
       }
       
-      // Create a component for this typography element
-      const component = figma.createComponent();
-      component.name = element.identifier;
-      component.layoutMode = "VERTICAL";
-      component.primaryAxisSizingMode = "FIXED"; // Fixed width to fill parent
-      component.counterAxisSizingMode = "AUTO"; // Height hugs content
-      component.width = 800; // Match parent width
-      component.paddingTop = nudgeTop;
-      component.paddingBottom = paddingBottom;
-      component.fills = []; // No background for individual components
-      
       // Create the text node AFTER font is loaded
       const textNode = figma.createText();
       textNode.fontName = { family: loadedFontFamily, style: loadedFontStyle };
       textNode.fontSize = fontSize;
       textNode.lineHeight = { value: lineHeight, unit: "PIXELS" };
       textNode.characters = text; // Set characters AFTER font is set
-      textNode.textAutoResize = "NONE"; // Don't auto-resize, let layout handle it
       
-      // Add the text node to the component
-      component.appendChild(textNode);
-      
-      // Set the text to stretch to fill the component width
-      textNode.layoutAlign = "STRETCH";
-      textNode.resize(800, textNode.height); // Set text width to match parent
-      
-      // Apply font weight using variable binding
+      // NEW APPROACH: Try variable binding using the colleague's method
       let weightApplied = false;
       
       try {
@@ -243,7 +183,20 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
         figma.notify(`Warning: Could not apply font weight ${fontWeight} to ${element.identifier}. Using default style.`);
       }
       
-      // Add the component to the main container
+      // Create the component directly with text
+      const component = figma.createComponent();
+      component.name = element.identifier;
+      component.layoutMode = "VERTICAL";
+      component.primaryAxisSizingMode = "AUTO"; // This makes it hug content height
+      component.counterAxisSizingMode = "AUTO"; // Let width be determined by content
+      component.paddingTop = nudgeTop;
+      component.paddingBottom = paddingBottom;
+      component.fills = []; // Remove white background from individual components
+      
+      // Add the text node directly to the component
+      component.appendChild(textNode);
+      
+      // Add the component directly to the main container
       mainContainer.appendChild(component);
     }
     
@@ -261,5 +214,4 @@ async function generateTypographyComponents(config, baselineUnit, fontFamily, co
   } catch (error) {
     figma.notify(`Error: ${error.message}`, { error: true });
   }
-}
-// ...existing code...
+} 

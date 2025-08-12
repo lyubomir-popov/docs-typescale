@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typography Demo - Apps</title>
+    <link rel="stylesheet" href="../css/apps.css">
+    <style>
+        body {
+            margin: 0;
+        }
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+        .toggle-grid {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            padding: 0.5rem 1rem;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .toggle-grid:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="u-baseline-grid">
+    <button class="toggle-grid" onclick="toggleGrid()">Toggle Baseline Grid</button>
+    
+    <div class="demo-container">
+        <div class="content">
+            <hr>
+            <h1>Typography Demo - Apps</h1>
+            
+            <p>This is a demonstration of the apps typescale. The baseline grid overlay shows how text aligns to the baseline grid.</p>
+            
+            <hr>
+            <h2>Heading Level 2</h2>
+            <p>This paragraph demonstrates the spacing and alignment between headings and paragraphs. The baseline grid ensures consistent vertical rhythm throughout the document.</p>
+            
+            <hr>
+            <h3>Heading Level 3</h3>
+            <p>Each heading level has been carefully calibrated to maintain proper spacing and alignment. The baseline unit provides a consistent foundation for all typography.</p>
+            
+            <hr>
+            <h4>Heading Level 4</h4>
+            <p>Notice how all text elements align perfectly to the baseline grid. This creates a harmonious visual rhythm that improves readability and overall design quality.</p>
+            
+            <hr>
+            <h5>Heading Level 5</h5>
+            <p>The spacing between elements is calculated based on the baseline unit, ensuring consistent vertical rhythm. This approach works well for both short and long-form content.</p>
+            
+            <hr>
+            <h6>Heading Level 6</h6>
+            <p>This typescale is designed specifically for apps content. The font sizes, line heights, and spacing have been optimized for this particular use case.</p>
+            
+            <hr>
+            <h2>Another Section</h2>
+            <p>You can toggle the baseline grid overlay using the button in the top-right corner. This helps visualize how the typography aligns to the baseline grid.</p>
+            
+            <hr>
+            <h3>Technical Details</h3>
+            <p>The baseline grid is calculated using the baseline unit from the configuration. Each text element includes precise padding-top values to ensure perfect alignment.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleGrid() {
+            const body = document.body;
+            body.classList.toggle('u-baseline-grid');
+        }
+    </script>
+</body>
+</html>

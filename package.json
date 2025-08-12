@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/dist/demos/typography-docs.html --entry-file=dist/demos/typography-docs.html --watch=dist\"",
     "watch": "node scripts/watch.js",
-    "generate": "npm run generate:docs && npm run generate:editorial",
+    "generate": "npm run generate:docs && npm run generate:editorial && npm run generate:apps",
     "generate:docs": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-docs.json src/docs && node scripts/update-plugin-tokens.js",
     "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json src/editorial && node scripts/update-plugin-tokens.js",
+    "generate:apps": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-apps.json src/apps && node scripts/update-plugin-tokens.js",
     "update:plugin": "node scripts/update-plugin-tokens.js",
     "build:docs": "sass --load-path=node_modules src/docs/main.scss:dist/css/docs.css --style=compressed",
     "build:editorial": "sass --load-path=node_modules src/editorial/main.scss:dist/css/editorial.css --style=compressed",
+    "build:apps": "sass --load-path=node_modules src/apps/main.scss:dist/css/apps.css --style=compressed",
     "demo:docs": "open dist/demos/typography-docs.html",
-    "demo:editorial": "open dist/demos/typography-editorial.html"
+    "demo:editorial": "open dist/demos/typography-editorial.html",
+    "demo:apps": "open dist/demos/typography-apps.html"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

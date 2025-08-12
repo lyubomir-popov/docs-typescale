@@ -329,6 +329,12 @@ console.log('📁 Watching config/ directory and src/ directories');
 
 ensureDirectories();
 
+// Process all configs initially and update plugin
+console.log('🚀 Initial setup - processing all configs...');
+processAllConfigs();
+updatePluginTokens();
+console.log('✅ Initial setup complete\n');
+
 // Watch all relevant files for both demos
 const watchPaths = [
   path.join(process.cwd(), CONFIG_DIR, '*.json'),
@@ -337,6 +343,12 @@ const watchPaths = [
   path.join(process.cwd(), 'src/docs/main.scss'),
   path.join(process.cwd(), 'src/editorial/main.scss')
 ];
+
+// Also watch the specific config files directly
+const configFiles = getConfigFiles();
+configFiles.forEach(configPath => {
+  watchPaths.push(path.join(process.cwd(), configPath));
+});
 
 console.log('👀 Watching paths:');
 watchPaths.forEach(path => console.log(`   ${path}`));
@@ -355,19 +367,31 @@ const watcher = chokidar.watch(watchPaths, {
 watcher.on('change', (filePath) => {
   console.log(`📝 File changed: ${filePath}`);
   
-  // Determine which configs need to be rebuilt
-  const configFiles = getConfigFiles();
-  if (configFiles.length === 0) {
-    console.log('❌ No typography config files found in config/ directory');
-    return;
+  // If a config file changed, regenerate everything and update plugin
+  if (filePath.includes('typography-config-')) {
+    console.log('🔄 Config file changed - regenerating everything...');
+    
+    // Regenerate tokens for both configs
+    execSync('npm run generate', { stdio: 'inherit' });
+    
+    // Update plugin tokens
+    updatePluginTokens();
+    
+    console.log('✅ Config changes processed and plugin updated\n');
+  } else {
+    // For other files, just rebuild the demos
+    const configFiles = getConfigFiles();
+    if (configFiles.length === 0) {
+      console.log('❌ No typography config files found in config/ directory');
+      return;
+    }
+    
+    console.log('🔄 Rebuilding demos...');
+    configFiles.forEach(configPath => {
+      processConfig(configPath);
+    });
+    console.log('✅ Demos rebuilt\n');
   }
-  
-  // Rebuild all configs when any file changes
-  console.log('🔄 Rebuilding all demos...');
-  configFiles.forEach(configPath => {
-    processConfig(configPath);
-  });
-  console.log('✅ All demos rebuilt\n');
 });
 
 watcher.on('add', (filePath) => {

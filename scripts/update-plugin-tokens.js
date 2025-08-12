@@ -6,13 +6,15 @@ const path = require('path');
 // Configuration
 const DOCS_TOKENS_FILE = 'src/docs/tokens.json';
 const EDITORIAL_TOKENS_FILE = 'src/editorial/tokens.json';
+const APPS_TOKENS_FILE = 'src/apps/tokens.json';
 const UI_FILE = 'figma-plugin/ui.html';
 
 function updatePluginTokens() {
   try {
     const pluginTokens = {
       docs: null,
-      editorial: null
+      editorial: null,
+      apps: null
     };
 
     // Read docs tokens
@@ -63,6 +65,30 @@ function updatePluginTokens() {
       console.log('⚠️  Editorial tokens not found, skipping...');
     }
 
+    // Read apps tokens
+    if (fs.existsSync(APPS_TOKENS_FILE)) {
+      const appsTokens = JSON.parse(fs.readFileSync(APPS_TOKENS_FILE, 'utf8'));
+      pluginTokens.apps = {
+        baselineUnit: appsTokens.baselineUnit,
+        elements: {}
+      };
+      
+      Object.keys(appsTokens.elements).forEach(key => {
+        const element = appsTokens.elements[key];
+        pluginTokens.apps.elements[key] = {
+          fontSize: element.fontSize,
+          lineHeight: element.lineHeight,
+          fontWeight: element.fontWeight,
+          fontStyle: element.fontStyle,
+          spaceAfter: element.spaceAfter,
+          nudgeTop: element.nudgeTop
+        };
+      });
+      console.log('✅ Loaded apps tokens');
+    } else {
+      console.log('⚠️  Apps tokens not found, skipping...');
+    }
+
     // Read the UI file
     const uiFilePath = path.resolve(UI_FILE);
     if (!fs.existsSync(uiFilePath)) {
@@ -104,6 +130,14 @@ function updatePluginTokens() {
       console.log('\n📋 Editorial elements:');
       Object.keys(pluginTokens.editorial.elements).forEach(key => {
         const element = pluginTokens.editorial.elements[key];
+        console.log(`  ${key}: ${element.fontSize}/${element.lineHeight}, weight ${element.fontWeight}`);
+      });
+    }
+    
+    if (pluginTokens.apps) {
+      console.log('\n📋 Apps elements:');
+      Object.keys(pluginTokens.apps.elements).forEach(key => {
+        const element = pluginTokens.apps.elements[key];
         console.log(`  ${key}: ${element.fontSize}/${element.lineHeight}, weight ${element.fontWeight}`);
       });
     }

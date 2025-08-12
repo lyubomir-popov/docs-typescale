@@ -9,62 +9,62 @@
   "elements": [
     {
       "identifier": "h1",
-      "fontSize": 2.625,
-      "lineHeight": 6,
+      "fontSize": 1.5,
+      "lineHeight": 4,
+      "spaceAfter": 2,
+      "fontFamily": "sans",
+      "fontWeight": 600,
+      "fontStyle": "normal"
+    },
+    {
+      "identifier": "h2",
+      "fontSize": 1.5,
+      "lineHeight": 4,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
-      "identifier": "h2",
-      "fontSize": 2.625,
-      "lineHeight": 6,
-      "spaceAfter": 2,
-      "fontFamily": "sans",
-      "fontWeight": 200,
-      "fontStyle": "normal"
-    },
-    {
       "identifier": "h3",
-      "fontSize": 1.5,
-      "lineHeight": 4,
-      "spaceAfter": 2,
+      "fontSize": 1.125,
+      "lineHeight": 3,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
       "identifier": "h4",
-      "fontSize": 1.5,
-      "lineHeight": 4,
-      "spaceAfter": 2,
+      "fontSize": 1.125,
+      "lineHeight": 3,
+      "spaceAfter": 1,
       "fontFamily": "sans",
-      "fontWeight": 300,
+      "fontWeight": 400,
       "fontStyle": "normal"
     },
     {
       "identifier": "h5",
-      "fontSize": 1,
-      "lineHeight": 3,
+      "fontSize": 0.875,
+      "lineHeight": 2.5,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 550,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
       "identifier": "h6",
-      "fontSize": 1,
-      "lineHeight": 3,
+      "fontSize": 0.875,
+      "lineHeight": 2.5,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 550,
+      "fontWeight": 400,
       "fontStyle": "normal"
     },
     {
       "identifier": "p",
-      "fontSize": 1,
-      "lineHeight": 3,
+      "fontSize": 0.875,
+      "lineHeight": 2.5,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 400,
