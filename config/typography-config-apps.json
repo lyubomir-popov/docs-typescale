@@ -13,7 +13,7 @@
       "lineHeight": 4,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 600,
+      "fontWeight": 500,
       "fontStyle": "normal"
     },
     {
@@ -22,23 +22,23 @@
       "lineHeight": 4,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 500,
+      "fontWeight": 300,
       "fontStyle": "normal"
     },
     {
       "identifier": "h3",
       "fontSize": 1.125,
       "lineHeight": 3,
-      "spaceAfter": 1,
+      "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 500,
+      "fontWeight": 600,
       "fontStyle": "normal"
     },
     {
       "identifier": "h4",
       "fontSize": 1.125,
       "lineHeight": 3,
-      "spaceAfter": 1,
+      "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 400,
       "fontStyle": "normal"
@@ -49,7 +49,7 @@
       "lineHeight": 2.5,
       "spaceAfter": 2,
       "fontFamily": "sans",
-      "fontWeight": 500,
+      "fontWeight": 600,
       "fontStyle": "normal"
     },
     {
@@ -59,7 +59,7 @@
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 400,
-      "fontStyle": "normal"
+      "fontStyle": "italic"
     },
     {
       "identifier": "p",

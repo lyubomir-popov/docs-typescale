@@ -1,3 +1,5 @@
+
+
 // =============================================================================
 // IMPORT AUTOMATED OVERRIDES
 // =============================================================================
@@ -9,30 +11,35 @@
 // MANUAL VANILLA FRAMEWORK OVERRIDES
 // =============================================================================
 
-// Override vanilla font size settings for responsive typography
-// Based on: https://github.com/canonical/vanilla-framework/pull/5521/files
-
 // Import Sass math module for division operations
 @use "sass:math";
+
+// Override vanilla font size settings for responsive typography
+// Based on: https://github.com/canonical/vanilla-framework/pull/5521/files
 
 // Responsive font sizes using calc() - clear start and end points
 // Start: 12px at 0px
 // End: 14px at 1600px
 $fs-start-size-unitless: 0.75;  // 12px / 16px = 0.75
 $fs-end-size-unitless: 0.875;   // 14px / 16px = 0.875
-$fs-breakpoint: 90rem;          // 1440px
+$fs-breakpoint: 90rem;   // End breakpoint (1600px / 16px = 100rem)
 
-// Calculate the responsive font size
-$fs-responsive-size: calc(#{$fs-start-size-unitless}rem + (#{$fs-end-size-unitless} - #{$fs-start-size-unitless}) * ((100vw - 0rem) / (#{$fs-breakpoint} - 0rem)));
+// Calculate the vw slope using unitless values
+// Convert breakpoint to vw units: 1600px = 16vw
+$fs-breakpoint-vw: math.div($fs-breakpoint, 100);
+// Calculate unitless slope: (0.875 - 0.75) = 0.125 (unitless)
+$fs-slope-unitless: $fs-end-size-unitless - $fs-start-size-unitless;
+$fs-vw-slope: calc(#{$fs-slope-unitless} * 1vw);
 
-// Override vanilla framework font size variables
-$fs-base-font-size: $fs-responsive-size;
-$fs-base-line-height: 1.5;
+// Formula: start_size + vw_slope
+$fs-calculation: calc(#{$fs-start-size-unitless}rem + $fs-vw-slope);
 
-// Override vanilla framework heading font sizes
-$fs-heading-font-size: $fs-responsive-size;
-$fs-heading-line-height: 1.2;
 
-// Override vanilla framework paragraph font sizes
-$fs-paragraph-font-size: $fs-responsive-size;
-$fs-paragraph-line-height: 1.6; 
+$base-font-sizes: (
+  base: .875rem,
+  large: .875rem,
+);
+
+// Override vanilla's default font sizes to be responsive
+$font-size-base: .875rem;
+$font-size-largescreen: .875rem;
