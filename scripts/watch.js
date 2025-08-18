@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 const chokidar = require('chokidar');
+const crypto = require('crypto');
 
 // Ensure chokidar is installed
 try {
@@ -365,17 +366,50 @@ console.log('👀 Watching paths:');
 watchPaths.forEach(path => console.log(`   ${path}`));
 
 const watcher = chokidar.watch(watchPaths, {
-  persistent: true,
-  ignoreInitial: false,
-  usePolling: true,
-  interval: 500, // More frequent polling
-  awaitWriteFinish: {
-    stabilityThreshold: 100,
-    pollInterval: 100
-  }
+	persistent: true,
+	ignoreInitial: false,
+	usePolling: true,
+	interval: 500, // More frequent polling
+	awaitWriteFinish: {
+		stabilityThreshold: 150,
+		pollInterval: 100
+	},
+	ignored: [
+		'**/dist/**',
+		'**/.git/**',
+		'**/_generated-styles.scss',
+		'**/_vanilla-settings-automated-overrides.scss',
+		'**/_vanilla-text-settings.generated.scss'
+	]
 });
 
+// Cache file content hashes to avoid rebuilding on no-op saves
+const fileHashCache = new Map();
+
+function getFileHash(filePath) {
+	try {
+		const data = fs.readFileSync(filePath);
+		return crypto.createHash('sha1').update(data).digest('hex');
+	} catch {
+		return null;
+	}
+}
+
+function hasContentChanged(filePath) {
+	const newHash = getFileHash(filePath);
+	const oldHash = fileHashCache.get(filePath) || null;
+	if (newHash && newHash !== oldHash) {
+		fileHashCache.set(filePath, newHash);
+		return true;
+	}
+	return false;
+}
+
 watcher.on('change', (filePath) => {
+  // Skip if content is identical (e.g., Ctrl+S without changes)
+  if (!hasContentChanged(filePath)) {
+    return;
+  }
   console.log(`📝 File changed: ${filePath}`);
 
   const isTypographyConfig = filePath.includes('typography-config-');
