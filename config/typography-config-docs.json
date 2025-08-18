@@ -11,7 +11,7 @@
       "identifier": "h1",
       "fontSize": 2,
       "lineHeight": 10,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
@@ -20,7 +20,7 @@
       "identifier": "h2",
       "fontSize": 2,
       "lineHeight": 10,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 300,
       "fontStyle": "normal"
@@ -29,7 +29,7 @@
       "identifier": "h3",
       "fontSize": 1.5,
       "lineHeight": 8,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
@@ -38,7 +38,7 @@
       "identifier": "h4",
       "fontSize": 1.5,
       "lineHeight": 8,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 300,
       "fontStyle": "normal"
@@ -47,7 +47,7 @@
       "identifier": "h5",
       "fontSize": 1.125,
       "lineHeight": 6,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
@@ -56,7 +56,7 @@
       "identifier": "h6",
       "fontSize": 1.125,
       "lineHeight": 6,
-      "spaceAfter": 2,
+      "spaceAfter": 1,
       "fontFamily": "sans",
       "fontWeight": 300,
       "fontStyle": "normal"
@@ -65,7 +65,7 @@
       "identifier": "p",
       "fontSize": 0.875,
       "lineHeight": 5,
-      "spaceAfter": 2,
+      "spaceAfter": 3,
       "fontFamily": "sans",
       "fontWeight": 400,
       "fontStyle": "normal"

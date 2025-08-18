@@ -16,6 +16,7 @@ const TOKENS_DIR = 'dist/tokens';
 const GENERATED_STYLES_DIR = 'src';
 const CSS_OUTPUT_DIR = 'dist/css';
 const DEMO_OUTPUT_DIR = 'dist/demos';
+const FORCE_DEMOS = process.argv.includes('--force-demos');
 
 // Ensure output directories exist
 function ensureDirectories() {
@@ -178,7 +179,18 @@ function generateBaselineStyles(tokens, configName) {
 
 function generateDemoHTML(configName, cssPath) {
   try {
-    const demoContent = `<!DOCTYPE html>
+    // Respect user-authored demos: prefer a template in src/{scale}/demo.html
+    const templatePath = path.join(GENERATED_STYLES_DIR, configName, 'demo.html');
+    const demoPath = path.join(DEMO_OUTPUT_DIR, `typography-${configName}.html`);
+
+    if (fs.existsSync(demoPath) && !FORCE_DEMOS && !fs.existsSync(templatePath)) {
+      console.log(`⏭️  Demo HTML exists for ${configName}, skipping overwrite (use --force-demos to regenerate)`);
+      return true;
+    }
+
+    let demoContent = fs.existsSync(templatePath)
+      ? fs.readFileSync(templatePath, 'utf8')
+      : `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -265,9 +277,8 @@ function generateDemoHTML(configName, cssPath) {
 </body>
 </html>`;
 
-    const demoPath = path.join(DEMO_OUTPUT_DIR, `typography-${configName}.html`);
     fs.writeFileSync(demoPath, demoContent);
-    console.log(`✅ Demo HTML generated for ${configName}`);
+    console.log(`✅ Demo HTML ${fs.existsSync(templatePath) ? 'updated from template' : 'generated'} for ${configName}${FORCE_DEMOS ? ' (forced)' : ''}`);
     
     return true;
   } catch (error) {
