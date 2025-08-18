@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "concurrently \"node scripts/watch.js\" \"live-server --port=3000 --open=/dist/demos/typography-docs.html --entry-file=dist/demos/typography-docs.html --watch=dist\"",
     "watch": "node scripts/watch.js",
-    "generate": "npm run generate:docs && npm run generate:editorial && npm run generate:apps",
+    "generate": "npm run generate:docs && npm run generate:editorial && npm run generate:apps && npm run generate:vanilla-text-settings",
     "generate:docs": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-docs.json src/docs && node scripts/update-plugin-tokens.js",
     "generate:editorial": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-editorial.json src/editorial && node scripts/update-plugin-tokens.js",
     "generate:apps": "npx @lyubomir-popov/baseline-nudge-generator generate config/typography-config-apps.json src/apps && node scripts/update-plugin-tokens.js",
+    "generate:vanilla-text-settings": "node scripts/generate-vanilla-text-settings.js",
     "update:plugin": "node scripts/update-plugin-tokens.js",
     "build:docs": "sass --load-path=node_modules src/docs/main.scss:dist/css/docs.css --style=compressed",
     "build:editorial": "sass --load-path=node_modules src/editorial/main.scss:dist/css/editorial.css --style=compressed",
@@ -20,10 +21,10 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "live-server": "^1.2.2",
-    "sass": "^1.69.5"
+    "sass": "^1.77.0"
   },
   "dependencies": {
     "@lyubomir-popov/baseline-nudge-generator": "^1.4.1",
-    "vanilla-framework": "^4.26.1"
+    "vanilla-framework": "^4.30.0"
   }
 }

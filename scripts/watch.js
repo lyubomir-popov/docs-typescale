@@ -366,17 +366,26 @@ const watcher = chokidar.watch(watchPaths, {
 
 watcher.on('change', (filePath) => {
   console.log(`📝 File changed: ${filePath}`);
-  
-  // If a config file changed, regenerate everything and update plugin
-  if (filePath.includes('typography-config-')) {
-    console.log('🔄 Config file changed - regenerating everything...');
-    
-    // Regenerate tokens for both configs
-    execSync('npm run generate', { stdio: 'inherit' });
-    
-    // Update plugin tokens
+
+  const isTypographyConfig = filePath.includes('typography-config-');
+
+  if (isTypographyConfig) {
+    console.log('🔄 Config file changed - rebuilding baseline styles and CSS...');
+
+    // Rebuild end-to-end using the same flow as initial setup
+    const configFiles = getConfigFiles();
+    if (configFiles.length === 0) {
+      console.log('❌ No typography config files found in config/ directory');
+      return;
+    }
+
+    configFiles.forEach(configPath => {
+      processConfig(configPath);
+    });
+
+    // Also refresh the plugin tokens after rebuild
     updatePluginTokens();
-    
+
     console.log('✅ Config changes processed and plugin updated\n');
   } else {
     // For other files, just rebuild the demos
@@ -385,7 +394,7 @@ watcher.on('change', (filePath) => {
       console.log('❌ No typography config files found in config/ directory');
       return;
     }
-    
+
     console.log('🔄 Rebuilding demos...');
     configFiles.forEach(configPath => {
       processConfig(configPath);

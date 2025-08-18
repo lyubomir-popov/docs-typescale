@@ -1,5 +1,5 @@
 {
-  "baselineUnit": 0.5,
+  "baselineUnit": 0.25,
   "fontFiles": [
     {
       "family": "sans",
@@ -10,8 +10,8 @@
     {
       "identifier": "h1",
       "fontSize": 2,
-      "lineHeight": 5,
-      "spaceAfter": 1,
+      "lineHeight": 10,
+      "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
@@ -19,8 +19,8 @@
     {
       "identifier": "h2",
       "fontSize": 2,
-      "lineHeight": 5,
-      "spaceAfter": 1,
+      "lineHeight": 10,
+      "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 300,
       "fontStyle": "normal"
@@ -28,8 +28,8 @@
     {
       "identifier": "h3",
       "fontSize": 1.5,
-      "lineHeight": 4,
-      "spaceAfter": 1,
+      "lineHeight": 8,
+      "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,
       "fontStyle": "normal"
@@ -37,8 +37,8 @@
     {
       "identifier": "h4",
       "fontSize": 1.5,
-      "lineHeight": 4,
-      "spaceAfter": 1,
+      "lineHeight": 8,
+      "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 300,
       "fontStyle": "normal"
@@ -46,7 +46,7 @@
     {
       "identifier": "h5",
       "fontSize": 1.125,
-      "lineHeight": 3,
+      "lineHeight": 6,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 500,
@@ -55,7 +55,7 @@
     {
       "identifier": "h6",
       "fontSize": 1.125,
-      "lineHeight": 3,
+      "lineHeight": 6,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 300,
@@ -64,7 +64,7 @@
     {
       "identifier": "p",
       "fontSize": 0.875,
-      "lineHeight": 2.5,
+      "lineHeight": 5,
       "spaceAfter": 2,
       "fontFamily": "sans",
       "fontWeight": 400,

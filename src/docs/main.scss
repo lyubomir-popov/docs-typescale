@@ -5,15 +5,14 @@
 // IMPORT VANILLA OVERRIDES
 // =============================================================================
 
-// Import vanilla framework overrides (must come before vanilla framework)
-@import '_vanilla-settings-overrides';
+// Import Vanilla text settings (generated) and overrides
+@import '_settings-typography';
 
 // =============================================================================
 // IMPORT GENERATED OVERRIDES
 // =============================================================================
 
-// Import automated vanilla overrides for default config
-@import '_vanilla-settings-automated-overrides';
+// (automated overrides imported via _settings-typography)
 
 // =============================================================================
 // IMPORT VANILLA FRAMEWORK

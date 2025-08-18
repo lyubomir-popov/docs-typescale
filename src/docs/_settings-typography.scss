@@ -1,0 +1,12 @@
+// Typography settings wiring for Docs
+// Order: settings -> framework -> components
+
+// Generated Vanilla text settings maps
+@import '_vanilla-text-settings.generated';
+
+// Existing overrides (manual)
+@import '_vanilla-settings-overrides';
+@import '_vanilla-settings-automated-overrides';
+
+
+
