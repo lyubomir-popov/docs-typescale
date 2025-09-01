@@ -1,0 +1,143 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+    
+    {% if page.nav_order %}
+    <div class="page-nav">
+      {% assign pages = site.pages | where: "nav_order", true | sort: "nav_order" %}
+      {% for p in pages %}
+        {% if p.nav_order == page.nav_order %}
+          {% assign current_index = forloop.index %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      
+      <div class="nav-links">
+        {% if current_index > 1 %}
+          {% assign prev_page = pages[current_index-2] %}
+          <a href="{{ prev_page.url | relative_url }}" class="nav-link prev">
+            ← {{ prev_page.title }}
+          </a>
+        {% endif %}
+        
+        {% if current_index < pages.size %}
+          {% assign next_page = pages[current_index] %}
+          <a href="{{ next_page.url | relative_url }}" class="nav-link next">
+            {{ next_page.title }} →
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+  
+  {% if page.nav_order %}
+  <footer class="page-footer">
+    <div class="nav-links">
+      {% if current_index > 1 %}
+        <a href="{{ prev_page.url | relative_url }}" class="nav-link prev">
+          ← {{ prev_page.title }}
+        </a>
+      {% endif %}
+      
+      {% if current_index < pages.size %}
+        <a href="{{ next_page.url | relative_url }}" class="nav-link next">
+          {{ next_page.title }} →
+        </a>
+      {% endif %}
+    </div>
+  </footer>
+  {% endif %}
+</article>
+
+<style>
+  .page-nav, .page-footer {
+    border-top: 1px solid #e1e5e9;
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .page-footer {
+    border-top: 1px solid #e1e5e9;
+    border-bottom: none;
+    margin-top: 3rem;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .nav-link {
+    padding: 0.5rem 1rem;
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #0969da;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .nav-link:hover {
+    background: #0969da;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav-link.prev {
+    margin-right: auto;
+  }
+  
+  .nav-link.next {
+    margin-left: auto;
+  }
+  
+  /* Table styling */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+  
+  th, td {
+    border: 1px solid #d0d7de;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  th {
+    background: #f6f8fa;
+    font-weight: 600;
+  }
+  
+  /* Code block styling */
+  pre {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  
+  code {
+    background: #f6f8fa;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  
+  pre code {
+    background: none;
+    padding: 0;
+  }
+</style>

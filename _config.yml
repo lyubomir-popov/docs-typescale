@@ -1,0 +1,61 @@
+# Site settings
+title: "Canonical Type Scale System"
+description: "A comprehensive typographic framework built on mathematical precision and domain-specific optimization"
+baseurl: "/docs-typescale"
+url: "https://canonical.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Navigation
+header_pages:
+  - docs/01-introduction.md
+  - docs/02-theoretical-foundation.md
+  - docs/03-domain-guidelines.md
+  - docs/04-typography-strategy.md
+  - docs/05-accessibility-responsive.md
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+
+# Custom variables
+author: "Canonical Design System Team"
+github_username: canonical
+repository: canonical/docs-typescale
+
+# Exclude from processing
+exclude:
+  - node_modules/
+  - package*.json
+  - scripts/
+  - src/
+  - dist/
+  - config/
+  - fonts/
+  - figma-plugin/
+  - "*.sh"
+  - "*.html"
