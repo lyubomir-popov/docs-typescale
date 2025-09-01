@@ -1,0 +1,269 @@
+---
+---
+
+@import "minima";
+
+/* Canonical Type Scale System - Editorial Configuration */
+/* Based on Spencer Mortensen's infinite harmonic sequence */
+
+/* Import Ubuntu Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap');
+
+/* Base configuration matching editorial typescale */
+:root {
+  --baseline-unit: 0.5rem;
+  --font-family-base: 'Ubuntu Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Editorial type scale sizes (16px base) */
+  --font-size-base: 1rem;        /* 16px - body, h5, h6 */
+  --font-size-h4: 1.5rem;        /* 24px - h3, h4 */
+  --font-size-h3: 1.5rem;        /* 24px */
+  --font-size-h2: 2.625rem;      /* 42px - h1, h2 */
+  --font-size-h1: 2.625rem;      /* 42px */
+  
+  /* Line heights for editorial */
+  --line-height-base: 1.5;       /* 24px */
+  --line-height-h4: 1.33;        /* 32px */
+  --line-height-h3: 1.33;        /* 32px */
+  --line-height-h2: 1.14;        /* 48px */
+  --line-height-h1: 1.14;        /* 48px */
+  
+  /* Weight strategy - increment by 200 */
+  --weight-light: 200;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+}
+
+/* Base typography */
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  font-weight: var(--weight-regular);
+}
+
+/* Heading hierarchy - Editorial domain with maximum contrast */
+h1, .h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-h1);
+  font-weight: var(--weight-medium);
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 4);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+  font-weight: var(--weight-light);
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 4);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  font-weight: var(--weight-medium);
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 3);
+}
+
+h4, .h4 {
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h4);
+  font-weight: 300;
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 3);
+}
+
+h5, .h5,
+h6, .h6 {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  font-weight: 550;
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 2);
+}
+
+/* Paragraph spacing - Harry Roberts single-direction approach */
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  font-weight: var(--weight-regular);
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  margin-top: 0;
+}
+
+/* Emphasis support for editorial domain */
+strong, b {
+  font-weight: var(--weight-semibold);
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* Code styling */
+code {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.9em;
+  background: #f6f8fa;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  border: 1px solid #d0d7de;
+}
+
+pre {
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: calc(var(--baseline-unit) * 2);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+/* Table styling with baseline alignment */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: calc(var(--baseline-unit) * 2);
+  font-size: var(--font-size-base);
+}
+
+th, td {
+  border: 1px solid #d0d7de;
+  padding: calc(var(--baseline-unit) * 1.5) calc(var(--baseline-unit) * 2);
+  text-align: left;
+  line-height: var(--line-height-base);
+}
+
+th {
+  background: #f6f8fa;
+  font-weight: var(--weight-semibold);
+}
+
+/* Navigation styling */
+.site-nav .page-link {
+  font-weight: var(--weight-medium);
+}
+
+.site-title {
+  font-weight: var(--weight-semibold);
+  font-size: 1.125rem;
+}
+
+/* Custom components for documentation */
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: calc(var(--baseline-unit) * 3);
+  margin: calc(var(--baseline-unit) * 4) 0;
+}
+
+.docs-card {
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: calc(var(--baseline-unit) * 3);
+  background: #f8f9fa;
+  transition: box-shadow 0.2s ease;
+}
+
+.docs-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.docs-card h3 {
+  margin-top: 0;
+  margin-bottom: calc(var(--baseline-unit) * 1);
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
+.docs-card h3 a {
+  color: #0969da;
+  text-decoration: none;
+}
+
+.docs-card h3 a:hover {
+  text-decoration: underline;
+}
+
+.docs-card p {
+  margin-bottom: 0;
+  color: #656d76;
+  font-size: 0.9rem;
+}
+
+/* Navigation between pages */
+.page-nav, .page-footer {
+  border-top: 1px solid #d0d7de;
+  padding-top: calc(var(--baseline-unit) * 2);
+  margin-top: calc(var(--baseline-unit) * 4);
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(var(--baseline-unit) * 2);
+}
+
+.nav-link {
+  padding: calc(var(--baseline-unit) * 1) calc(var(--baseline-unit) * 2);
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #0969da;
+  font-weight: var(--weight-medium);
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.nav-link:hover {
+  background: #0969da;
+  color: white;
+  text-decoration: none;
+}
+
+/* Responsive adjustments - Editorial domain halves spacing on smaller screens */
+@media (max-width: 768px) {
+  h1, h2 {
+    margin-top: calc(var(--baseline-unit) * 2);
+  }
+  
+  h3, h4 {
+    margin-top: calc(var(--baseline-unit) * 1.5);
+  }
+  
+  .docs-grid {
+    grid-template-columns: 1fr;
+    gap: calc(var(--baseline-unit) * 2);
+    margin: calc(var(--baseline-unit) * 2) 0;
+  }
+  
+  .docs-card {
+    padding: calc(var(--baseline-unit) * 2);
+  }
+}
+
+/* Utility for baseline grid visualization (for development) */
+.u-baseline-grid::after {
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.1), rgba(255, 0, 0, 0.1) 1px, transparent 1px, transparent);
+  background-size: 100% var(--baseline-unit);
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}

@@ -8,8 +8,8 @@ layout: default
     
     {% if page.nav_order %}
     <div class="page-nav">
-      {% assign pages = site.pages | where: "nav_order", true | sort: "nav_order" %}
-      {% for p in pages %}
+      {% assign doc_pages = site.pages | where_exp: "item", "item.nav_order != nil" | sort: "nav_order" %}
+      {% for p in doc_pages %}
         {% if p.nav_order == page.nav_order %}
           {% assign current_index = forloop.index %}
           {% break %}
@@ -18,14 +18,14 @@ layout: default
       
       <div class="nav-links">
         {% if current_index > 1 %}
-          {% assign prev_page = pages[current_index-2] %}
+          {% assign prev_page = doc_pages[current_index-2] %}
           <a href="{{ prev_page.url | relative_url }}" class="nav-link prev">
             ← {{ prev_page.title }}
           </a>
         {% endif %}
         
-        {% if current_index < pages.size %}
-          {% assign next_page = pages[current_index] %}
+        {% if current_index < doc_pages.size %}
+          {% assign next_page = doc_pages[current_index] %}
           <a href="{{ next_page.url | relative_url }}" class="nav-link next">
             {{ next_page.title }} →
           </a>
@@ -48,7 +48,7 @@ layout: default
         </a>
       {% endif %}
       
-      {% if current_index < pages.size %}
+      {% if current_index < doc_pages.size %}
         <a href="{{ next_page.url | relative_url }}" class="nav-link next">
           {{ next_page.title }} →
         </a>
